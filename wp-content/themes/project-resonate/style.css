@@ -1,0 +1,31 @@
+/*
+Theme Name:   Project Resonate
+Theme URI:    http://themetrust.com/port
+Description:  Project Resonate
+Author:       Goozmo
+Author URI:   http://goozmo.com
+Template:     enfold
+Version:      1.0.0
+License:      GNU General Public License v2 or later
+License URI:  http://www.gnu.org/licenses/gpl-2.0.html
+Tags:         my, child, theme, tags
+Text Domain:  project-resonate 
+*/
+
+
+/*
+	
+	orange : rgb( 239, 118, 34 );
+	the hideous green : rgb( 192, 212, 47 )
+	
+*/
+html, body
+{
+	overflow-x : hidden;
+}
+
+* a
+{
+	transition : color 0.2s ease-in-out;
+	-webkit-transition : color 0.2s ease-in-out;
+}
