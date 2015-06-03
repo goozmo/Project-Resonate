@@ -32,19 +32,18 @@ function custom_login_logo() {
     echo "<style type=\"text/css\">
     	body.login
     	{
-	        background-image : url( " . get_stylesheet_directory_uri() . "/images/thewoods.jpg );
-	        background-size: cover;
-	        background-position : center center;
-	        background-color: rgb( 0,0,0 );
+			background-size: cover;
+			background-position : center center;
+			background-color: rgb( 0,0,0 );
         }
     	.login #login
     	{
-	    	max-width: 500px;
-	    	width: 100%;
+			max-width: 500px;
+			width: 100%;
     	}
         .login #login h1 a
         {
-	        background-image:url(/wp-content/uploads/logo-boulderclean-W.png);
+	        background-image:url( /wp-content/uploads/2015/05/logo-pr-w.png );
 	        width: 100%;
 	        background-size: contain;
         }
@@ -67,6 +66,23 @@ function custom_login_logo() {
         .login #login #backtoblog a
         {
 	        color: rgb( 255,255,255 );
+        }
+        
+        .login .message
+        {
+	        border-color: rgb( 239, 122, 32 );
+        }
+        
+        .wp-core-ui .button-primary
+        {
+	        background-color: rgb( 239, 122, 32 );
+	        border-color: rgb( 219, 102, 12 );
+        }
+        
+         .wp-core-ui .button-primary:hover
+        {
+	        background-color: rgb( 219, 102, 12 );
+	        border-color: rgb( 199, 92, 0 );
         }
         
     </style>";
