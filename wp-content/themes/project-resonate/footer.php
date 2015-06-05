@@ -181,5 +181,95 @@
 <a href='#top' title='<?php _e('Scroll to top','avia_framework'); ?>' id='scroll-top-link' <?php echo av_icon_string( 'scrolltop' ); ?>><span class="avia_hidden_link_text"><?php _e('Scroll to top','avia_framework'); ?></span></a>
 
 <div id="fb-root"></div>
+
+<script src="//assets.transloadit.com/js/jquery.transloadit2-v2-latest.js"></script>
+
+<script>
+candyjar.api.evLoad( function(){
+	
+	//if( document.getElementById( 'checkout' ) ){
+		//try{			
+			// [ transloadit ]
+			
+			jQuery(function(){
+				jQuery('.cart').transloadit({
+					wait : true,
+					triggerUploadOnFileSelection : false,
+					params : {
+						auth : {
+							key: "b15a103003e211e5a7cb1199b0923661"
+						},
+						steps : {
+							mp3 : {
+								robot : "/audio/encode",
+								use : ":original",
+								preset : "mp3"
+							},
+							waveform : {
+								robot : "/audio/waveform",
+								use : "mp3",
+								width : 500,
+								height : 200,
+								background_color : "000000",
+								outer_color : "cccccc",
+								center_color : "ffffff"
+							}
+						},
+						// notify_url : window.location.href,
+						notify_url : window.location.href 
+					},
+				});
+				console.log( 'true' );
+			});
+			
+			
+		//}
+		//catch( e ){
+		//	console.log( 'failed : ' + e );
+		//}
+	//}
+	//else{
+	//	console.log( 'false' );
+	//}
+	
+});
+	
+</script>
+
+
+<?php
+
+//if( isset( $_POST ) ){
+
+
+//}
+
+global $woocommerce;
+echo "<pre>";
+print_r( $woocommerce );
+echo "</pre>";
+
+
+echo "<pre>";
+print_r( $_POST );
+echo "</pre>";	
+	
+	
+$transloadit_resp = $_POST['transloadit'];
+// if (ini_get('magic_quotes_gpc') === '1') {
+	$transloadit_resp = stripslashes( $transloadit_resp );
+// }
+$transloadit_resp = json_decode( $transloadit_resp, true );
+
+$transloadit_resp_audio = $transloadit_resp['uploads'][0]['ssl_url'];
+echo "<h4>Audio: ".$transloadit_resp_audio."</h4>";
+
+$transloadit_resp_image = $transloadit_resp['results']['waveform'][0]['ssl_url'];
+echo "<h4>Image: ".$transloadit_resp_image."</h4>";
+
+echo "<pre>";
+print_r( $transloadit_resp );
+echo "</pre>";
+?>
 </body>
 </html>

@@ -57,7 +57,6 @@ global $woocommerce, $product, $post;
 		        <?php endforeach;?>
 			</tbody>
 		</table>
-
 		<?php do_action( 'woocommerce_before_add_to_cart_button' ); ?>
 
 		<div class="single_variation_wrap" style="display:none;">
@@ -82,7 +81,7 @@ global $woocommerce, $product, $post;
 	<?php else : ?>
 
 		<p class="stock out-of-stock"><?php _e( 'This product is currently out of stock and unavailable.', 'woocommerce' ); ?></p>
-
+		<input type="hidden" name="transloadit-data" value="stuff here"/>
 	<?php endif; ?>
 
 </form>
