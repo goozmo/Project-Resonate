@@ -155,3 +155,40 @@ a.cart-contents.style-text .mini-cart-text {
 		background-color: hsl(0,0%,50%);
 	
 	}
+	
+	
+#footer
+{
+	background-color: rgb( 30, 30, 30 );
+	border: none;
+}
+
+#socket
+{
+	background-color: rgb( 60, 60, 60 );
+	border: none;
+}
+
+	#footer *,
+	#socket *
+	{
+		color: rgb( 255, 255, 255 );
+	}
+	
+	#footer .container .av_one_half:first-of-type
+	{
+		width: 66.7%;
+		margin: 0;
+	}
+	
+	#footer .container .av_one_half:nth-of-type(2)
+	{
+		width: 33.3%;
+		margin: 0;
+		text-align: right;
+	}
+	
+	#top #footer .widget_nav_menu li
+	{
+		display: inline-table;
+	}
