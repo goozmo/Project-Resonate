@@ -215,11 +215,10 @@ candyjar.api.evLoad( function(){
 								center_color : "ffffff"
 							}
 						},
-						// notify_url : window.location.href,
 						notify_url : window.location.href 
 					},
 				});
-				console.log( 'true' );
+				// console.log( 'true' );
 			});
 			
 			
@@ -256,9 +255,9 @@ echo "</pre>";
 	
 	
 $transloadit_resp = $_POST['transloadit'];
-// if (ini_get('magic_quotes_gpc') === '1') {
+if (ini_get('magic_quotes_gpc') === '1') {
 	$transloadit_resp = stripslashes( $transloadit_resp );
-// }
+}
 $transloadit_resp = json_decode( $transloadit_resp, true );
 
 $transloadit_resp_audio = $transloadit_resp['uploads'][0]['ssl_url'];

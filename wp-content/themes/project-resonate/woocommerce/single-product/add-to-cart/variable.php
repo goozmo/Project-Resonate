@@ -81,7 +81,6 @@ global $woocommerce, $product, $post;
 	<?php else : ?>
 
 		<p class="stock out-of-stock"><?php _e( 'This product is currently out of stock and unavailable.', 'woocommerce' ); ?></p>
-		<input type="hidden" name="transloadit-data" value="stuff here"/>
 	<?php endif; ?>
 
 </form>

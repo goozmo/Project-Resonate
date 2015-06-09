@@ -175,63 +175,119 @@ remove_action( 'woocommerce_sidebar', 'woocommerce_get_sidebar', 10);
 
 
 
+
+
+
+
+
+
+
+/*
+	*
+	*
+	*
+	*
+*/
+
 add_action( 'woocommerce_after_checkout_form', 'woo_before_processed' );
 function woo_before_processed(  ){
-?>
-<script>
-	console.log( 'woocommerce_after_checkout_form' );
-</script>
-<?php
+
+	echo "<script>console.log( 'woocommerce_after_checkout_form' );</script>";
+
 }
 
 
+/*
+	*
+	*	on submit order
+	*	
+	*
+*/
 add_action( 'woocommerce_order_details_after_customer_details', 'woo_after_processed' );
-function woo_after_processed(  ){
-?>
-<script>
-	console.log( 'woocommerce_order_details_after_customer_details' );
-</script>
-<?php
+function woo_after_processed( $order ){
+	//global $woocommerce
+	
+	add_post_meta( $order->id, 'oid-'.$order->id, 'with_syrup' );
+	//echo "<pre>";
+	//print_r( $order );
+	//echo "</pre>";
+	
+	echo "<script>console.log( 'woocommerce_order_details_after_customer_details' );</script>";
 }
 
+
+/*
+	*
+	*
+	*
+	*
+*/
 add_action('woocommerce_add_order_item_meta','woo_hoo_stick_it_in_there',1, 2);
 function woo_hoo_stick_it_in_there( $item_id, $values ){
-	/*
-		*	post id
-		*	meta key
-		*	meta value
-		*
-	*/
-	global $woocommerce, $post;
-	$order = new WC_Order($post->ID);
 	
-	add_post_meta( $order, 'flapjacks', 'with_syrup' );
+	// echo "<pre>";
+	// print_r( $values );
+	// echo "</pre>";
+
 	echo "<script>console.log( 'woocommerce_add_order_item_meta' );</script>";
 }
 
 
-
+/*
+	*
+	*	on add to cart
+	*
+	*
+*/
 add_filter( 'woocommerce_add_cart_item_data', 'add_cart_item_custom_data_vase', 10, 2 );
-function add_cart_item_custom_data_vase( $cart_item_meta, $product_id ) {
+function add_cart_item_custom_data_vase( $cart_item_meta, $product_id, $variation_id ) {
 
 	global $woocommerce;  
-	$cart_item_meta['transloadit-data'] = $_POST['transloadit'];
-	WC()->session->set('transloadit-data', $_POST['transloadit']);
+	
+	$transloadit = array(
+		array(
+			"name" => "transloadit",
+			"value" => "Toots",
+			"display" => "McScoots",
+		),
+	);
+	
+	$cart_item_meta["transloadit-data"] = $transloadit;
+		
+	WC()->session->set("transloadit-data", $_POST['transloadit'] );
+	
+	
+	
+	//echo "<pre>";
+	//print_r( $cart_item_meta );
+	//echo "</pre>";
+	
 	echo "<script>console.log('woocommerce_add_cart_item_data')</script>";
 	return $cart_item_meta; 
 }
 
 
+/*
+	*
+	* on view cart
+	*
+	*
+*/
 //Get it from the session and add it to the cart variable
 add_filter( 'woocommerce_get_cart_item_from_session', 'get_cart_items_from_session', 1, 3 );
 function get_cart_items_from_session( $item, $values, $key ) {
-    if ( array_key_exists( 'transloadit-data', $values ) ){
-    	$item[ 'here_there_everywhere' ] = "FUuuuUUUCK YOU!";
+	
+	//echo "<pre>";
+	//print_r( $values );
+	//echo "</pre>";
+	
+    // if ( array_key_exists( 'transloadit-data', $values ) ){
 		$item[ 'transloadit-data' ] = $values['transloadit-data'];
-	}
+	// }
+	
+	// echo "<script>console.log( 'woocommerce_get_cart_item_from_session' );</script>";
+	
 	return $item;
 }
-
-
 
 ?>
