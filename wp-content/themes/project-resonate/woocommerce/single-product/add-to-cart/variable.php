@@ -85,4 +85,121 @@ global $woocommerce, $product, $post;
 
 </form>
 
+<style>
+.variations input[name="attribute_bead-color"]
+{
+	margin:0;
+	padding:0;
+	-webkit-appearance:	none;
+	-moz-appearance:	none;
+	appearance:			none;
+	opacity: 0.4;
+	height: 24px;
+	width: 32px;
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-color: transparent !important;
+	
+	-webkit-transition: opacity 0.2s ease-in-out;
+	transition: opacity 0.2s ease-in-out;
+}
+
+.variations input[name="attribute_bead-color"]:checked,
+.variations input[name="attribute_bead-color"]:hover
+{
+	opacity: 1;
+}
+
+.variations input[value='black-opaque']
+{
+	background-image:url( '/wp-content/themes/project-resonate/images/pr-blackbutton.png');	
+}
+
+.variations input[value='white-opaque']
+{
+	background-image:url( '/wp-content/themes/project-resonate/images/pr-whitebutton.png');	
+}
+
+.variations input[value='orange-opaque']
+{
+	background-image:url( '/wp-content/themes/project-resonate/images/pr-orangeObutton.png');	
+}
+
+.variations input[value='pink-translucent']
+{
+	background-image:url( '/wp-content/themes/project-resonate/images/pr-pinkbutton.png');	
+}
+
+.variations input[value='green-translucent']
+{
+	background-image:url( '/wp-content/themes/project-resonate/images/pr-greenbutton.png');	
+}
+
+.variations input[value='blue-translucent']
+{
+	background-image:url( '/wp-content/themes/project-resonate/images/pr-bluebutton.png');	
+}
+</style>
+
+<script>
+	
+var doppleganger = document.getElementsByClassName( 'variations' );
+for( var i=0, n=doppleganger.length; i<n; i++ ){
+	doppleganger[i].addEventListener( 'change', function(){
+		candyShopInst.clickFunc();
+	});
+}
+
+
+candyShopInst = {
+	
+	thisImg : "",
+	thisBand : "",
+	thisBead : "",
+	
+	init : function(){
+		
+		this.thisImg = document.getElementsByClassName( 'woocommerce-main-image' )[0].getElementsByTagName('img')[0];
+		this.thisBand = document.getElementsByName( 'attribute_band-color' );
+		this.thisBead = document.getElementsByName( 'attribute_bead-color' );
+	
+	},
+	
+	clickFunc : function(){
+		
+		console.log( this.getVals() );
+
+	},
+	
+	getVals : function(){
+		for( var i=0, n=this.thisBand.length; i<n; i++ ){
+			if( this.thisBand[i].checked ){
+				var currentBand = this.thisBand[i].value;
+				// console.log( currentBand );
+				break;
+			}
+		}
+		for( var i=0, n=this.thisBead.length; i<n; i++ ){
+			if( this.thisBead[i].checked ){
+				var currentBead = this.thisBead[i].value;
+				// console.log( currentBead );
+				break;
+			}
+		}
+		
+		return {
+			'band' : currentBand,
+			'bead' : currentBead
+		}	
+	},
+	
+	getImage : function(){
+		
+	}
+	
+}
+
+candyShopInst.init();
+</script>
+
 <?php do_action( 'woocommerce_after_add_to_cart_form' ); ?>
