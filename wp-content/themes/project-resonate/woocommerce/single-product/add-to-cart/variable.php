@@ -156,18 +156,39 @@ candyShopInst = {
 	thisImg : "",
 	thisBand : "",
 	thisBead : "",
+	theseImg : {
+		"black-rubber-orange-opaque" : "/wp-content/uploads/2015/06/BlackOrange-450x350.png",
+		"black-rubber-black-opaque" : "/wp-content/uploads/2015/06/blackblack.png",
+		"black-rubber-white-opaque" : "",
+		"black-rubber-pink-translucent" : "",
+		"black-rubber-green-translucent" : "",
+		"black-rubber-blue-translucent" : "",
+		
+		"white-rubber-orange-opaque" : "",
+		"white-rubber-black-opaque" : "",
+		"white-rubber-white-opaque" : "",
+		"white-rubber-pink-translucent" : "",
+		"white-rubber-green-translucent" : "",
+		"white-rubber-blue-translucent" : "",
+		
+		"silver-chain-orange-opaque" : "",
+		"silver-chain-black-opaque" : "",
+		"silver-chain-white-opaque" : "",
+		"silver-chain-pink-translucent" : "",
+		"silver-chain-green-translucent" : "",
+		"silver-chain-blue-translucent" : "",
+	},
 	
 	init : function(){
-		
-		this.thisImg = document.getElementsByClassName( 'woocommerce-main-image' )[0].getElementsByTagName('img')[0];
+		this.thisImg = document.getElementsByClassName( 'attachment-shop_single' )[0];
 		this.thisBand = document.getElementsByName( 'attribute_band-color' );
 		this.thisBead = document.getElementsByName( 'attribute_bead-color' );
-	
+		this.getImage();
 	},
 	
 	clickFunc : function(){
 		
-		console.log( this.getVals() );
+		this.getImage();
 
 	},
 	
@@ -175,14 +196,12 @@ candyShopInst = {
 		for( var i=0, n=this.thisBand.length; i<n; i++ ){
 			if( this.thisBand[i].checked ){
 				var currentBand = this.thisBand[i].value;
-				// console.log( currentBand );
 				break;
 			}
 		}
 		for( var i=0, n=this.thisBead.length; i<n; i++ ){
 			if( this.thisBead[i].checked ){
 				var currentBead = this.thisBead[i].value;
-				// console.log( currentBead );
 				break;
 			}
 		}
@@ -194,6 +213,37 @@ candyShopInst = {
 	},
 	
 	getImage : function(){
+		
+		if( this.thisImg.parentNode ){
+			iParent = this.thisImg.parentNode;
+			iParent.removeChild( this.thisImg );
+		}
+		var vals = this.getVals();
+		
+		// console.log( vals.band );
+		// console.log( vals.bead );
+		
+		var val = vals.band + "-" + vals.bead;
+		// console.log( val );
+		
+		if( this.theseImg[val] ){
+			var updateIMG = this.theseImg[val];
+			// console.log( updateIMG );
+		}
+		
+		if( updateIMG ){
+				
+				thisIMG = document.createElement( 'img' );
+				thisIMG.className = "_gooMcGoo";
+				iParent.appendChild(thisIMG);
+			
+			thisIMG.src = updateIMG;
+			
+			//jQuery('.attachment-shop_single.wp-post-image').attr('src', updateIMG ).data( 'o_src', updateIMG );
+			
+			// console.log( jQuery('.attachment-shop_single.wp-post-image').attr('src') );
+			// console.log( jQuery('.attachment-shop_single.wp-post-image').data( 'o_src' ));
+		}
 		
 	}
 	
