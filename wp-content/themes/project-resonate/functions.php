@@ -248,7 +248,7 @@ function add_cart_item_custom_data_vase( $cart_item_meta, $product_id, $variatio
 		array(
 			"name" => "transloadit",
 			"value" => "Toots",
-			"display" => "McScoots",
+			"display" => "Toots McScoots",
 		),
 	);
 	
