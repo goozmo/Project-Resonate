@@ -85,6 +85,124 @@ global $woocommerce, $product, $post;
 
 </form>
 
+<script src="//assets.transloadit.com/js/jquery.transloadit2-v2-latest.js"></script>
+<form id="transloadit-form" name="fuckkkkkk" enctype="multipart/form-data" method="post">
+		<input type="file" name="transloadit"/>
+		<input type="submit" />
+</form>
+	<script>
+		//console.log( '<?php echo $audioFile; ?>' );
+
+
+
+/*
+	jQuery.ajax( '/wp-content/themes/project-resonate/woocommerce/transloadit-form.js', {
+		dataType: "script",
+		success : function( response ){
+			console.log( response );
+		},
+		error : function(){
+			console.log( 'fucked up' );
+			
+		}
+	});	
+*/
+
+			jQuery(function(){
+				jQuery('#transloadit-form').transloadit({
+					wait : true,
+					triggerUploadOnFileSelection : true,
+					params : {
+						auth : {
+							key: "b15a103003e211e5a7cb1199b0923661"
+						},
+						steps : {
+							mp3: {
+								use: ":original",
+								robot: "/audio/encode",
+								preset: "mp3"
+        					},
+							waveform : {
+								robot : "/audio/waveform",
+								use : "mp3",
+								width : 500,
+								height : 200,
+								background_color : "000000",
+								outer_color : "cccccc",
+								center_color : "ffffff"
+							}
+						},
+						notify_url : window.location.href
+					},
+					autoSubmit : false,
+					onUpload : function( upload ){
+						// console.log( upload );
+						
+						var woocomm = document.getElementsByClassName( 'variations_form cart' );
+						if( woocomm.length > 0 ){
+							
+							woocomm = woocomm[0];
+							
+							var transField = document.createElement( 'input' );
+							transField.type = 'hidden';
+							transField.name = 'transloadit-file';
+							transField.value = upload.url;
+							woocomm.appendChild( transField );
+							
+							var transName = document.createElement( 'input' );
+							transName.type = 'hidden';
+							transName.name = 'transloadit-name';
+							transName.value = upload.name;
+							woocomm.appendChild( transName );
+							
+						}
+					},
+					onResult : function( step, result ){
+						// console.log( step );
+						// console.log( result );
+						
+						var woocomm = document.getElementsByClassName( 'variations_form cart' );
+						if( woocomm.length > 0 ){
+							
+							woocomm = woocomm[0];
+							
+							var transField = document.createElement( 'input' );
+							transField.type = 'hidden';
+							transField.name = 'transloadit-png';
+							transField.value = result.url;
+							woocomm.appendChild( transField );
+							
+						}
+						
+/*
+						var oData = new FormData( document.getElementById( 'transloadit-form' ) );
+						var oReq = new XMLHttpRequest();
+						oReq.open( 'POST', '/wp-content/themes/project-resonate/woocommerce/transloadit-form.php', true );
+						
+						oReq.onreadystatechange = function(){
+							if( oReq.readyState == 4 ){
+								if( oReq.status >= 200 && oReq.status < 300 || oReq.status == 304 ){
+									console.log( oReq.response );
+								}
+								else if( oReq.status > 400 ){
+									
+								}
+							}
+						}
+						oReq.send( oData );
+*/
+							
+						
+					}
+				});
+				// console.log( 'true' );
+			});
+		
+</script>
+
+
+	
+
 <style>
 .variations input[name="attribute_bead-color"]
 {

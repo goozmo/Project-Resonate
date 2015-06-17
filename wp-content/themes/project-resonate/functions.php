@@ -182,17 +182,22 @@ remove_action( 'woocommerce_sidebar', 'woocommerce_get_sidebar', 10);
 
 
 
+
+
+
+
+
+
+
 /*
 	*
-	*
+	*	insert stuff before the cart button
 	*
 	*
 */
 
-add_action( 'woocommerce_after_checkout_form', 'woo_before_processed' );
-function woo_before_processed(  ){
-
-	echo "<script>console.log( 'woocommerce_after_checkout_form' );</script>";
+add_action( 'woocommerce_before_add_to_cart_button', 'add_transloadit_field' );
+function add_transloadit_field(){
 
 }
 
@@ -205,32 +210,44 @@ function woo_before_processed(  ){
 */
 add_action( 'woocommerce_order_details_after_customer_details', 'woo_after_processed' );
 function woo_after_processed( $order ){
-	//global $woocommerce
+	// global $woocommerce
 	
-	add_post_meta( $order->id, 'oid-'.$order->id, 'with_syrup' );
-	//echo "<pre>";
-	//print_r( $order );
-	//echo "</pre>";
+	//add_post_meta( $order->id, 'oid-'.$order->id, 'with_syrup' );
+	echo "<pre>";
+	print_r( $order );
+	echo "</pre>";
 	
-	echo "<script>console.log( 'woocommerce_order_details_after_customer_details' );</script>";
+	//echo "<script>console.log( 'woocommerce_order_details_after_customer_details' );</script>";
 }
 
 
 /*
 	*
-	*
+	*	on add to cart
 	*
 	*
 */
 add_action('woocommerce_add_order_item_meta','woo_hoo_stick_it_in_there',1, 2);
 function woo_hoo_stick_it_in_there( $item_id, $values ){
 	
-	// echo "<pre>";
-	// print_r( $values );
-	// echo "</pre>";
+	global $woocommerce;
+	
+	// $cust_vals = $values['transloadit-data'];
+	$cust_vals = WC()->session->get('transloadit-data');
+	$cust_vals2 = WC()->session->get('transloadit-file');
+	$cust_vals3 = WC()->session->get('transloadit-name');
+	wc_add_order_item_meta( $item_id, 'transloadit-png', $cust_vals );
+	wc_add_order_item_meta( $item_id, 'transloadit-file', $cust_vals2 );
+	wc_add_order_item_meta( $item_id, 'transloadit-name', $cust_vals3 );
+	
+	//echo "<pre>";
+	//print_r( $values );
+	//echo "</pre>";
 
 	echo "<script>console.log( 'woocommerce_add_order_item_meta' );</script>";
 }
+
+
 
 
 /*
@@ -242,27 +259,71 @@ function woo_hoo_stick_it_in_there( $item_id, $values ){
 add_filter( 'woocommerce_add_cart_item_data', 'add_cart_item_custom_data_vase', 10, 2 );
 function add_cart_item_custom_data_vase( $cart_item_meta, $product_id, $variation_id ) {
 
-	global $woocommerce;  
+	global $woocommerce;
+	
+	/*
+		*
+		*	image saving code
+		*
+		*
+	*/
+	$errors = array();
+	$root = (!empty($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'];
+	if( !file_exists( $_SERVER['DOCUMENT_ROOT'].'/wp-content/uploads/pres/' ) || !is_dir( $_SERVER['DOCUMENT_ROOT'].'/wp-content/uploads/pres/' ) ){
+		mkdir( $_SERVER['DOCUMENT_ROOT'].'/wp-content/uploads/pres/', 755 );
+	}
+	
+	try{
+		$url = $_POST['transloadit-png'];
+		$img = $_SERVER['DOCUMENT_ROOT'].'/wp-content/uploads/pres/flower.png';
+		file_put_contents($img, file_get_contents($url));
+		
+		$filepath = $root.'/wp-content/uploads/pres/flower.png';
+		
+	}
+	catch( Exception $e ){
+		$filepath = $e;
+	}
+	
+	/*
+		*
+		*	sound saving code
+		*
+		*
+	*/
+		
+	try{
+		$url = $_POST['transloadit-file'];
+		$img = $_SERVER['DOCUMENT_ROOT'].'/wp-content/uploads/flower.wav';
+		file_put_contents($img, file_get_contents($url));
+		
+		$filepath2 = $root.'/wp-content/uploads/pres/flower.wav';		
+	}
+	catch( Exception $e ){
+		$filepath2 = $e;
+	}
+	
+	//	WE NEED TO HOOK INTO https://codex.wordpress.org/Function_Reference/wp_insert_attachment to get it into the media library
 	
 	$transloadit = array(
 		array(
-			"name" => "transloadit",
-			"value" => "Toots",
+			"name" => "transloadit-png",
+			"value" => $filepath,
+			"file" => $filepath2,
 			"display" => "Toots McScoots",
+			"errors" => $errors,
+			"fileName" => $_POST['transloadit-name']
 		),
 	);
 	
-	$cart_item_meta["transloadit-data"] = $transloadit;
-		
-	WC()->session->set("transloadit-data", $_POST['transloadit'] );
+	$cart_item_meta["transloadit-name"] = $transloadit[0]['fileName'];
+	$cart_item_meta["transloadit-data"] = $transloadit[0]['value'];
+	$cart_item_meta["transloadit-file"] = $transloadit[0]['file'];
 	
+	WC()->session->set("transloadit-name", $transloadit[0]['fileName'] );	
+	WC()->session->set("transloadit-data", $transloadit[0]['value'] );
+	WC()->session->set("transloadit-file", $transloadit[0]['file'] );
 	
-	
-	//echo "<pre>";
-	//print_r( $cart_item_meta );
-	//echo "</pre>";
-	
-	echo "<script>console.log('woocommerce_add_cart_item_data')</script>";
 	return $cart_item_meta; 
 }
 
@@ -281,9 +342,17 @@ function get_cart_items_from_session( $item, $values, $key ) {
 	//print_r( $values );
 	//echo "</pre>";
 	
-    // if ( array_key_exists( 'transloadit-data', $values ) ){
+	if ( array_key_exists( 'transloadit-name', $values ) ){
+		$item[ 'transloadit-name' ] = $values['transloadit-name'];
+	}
+	
+    if ( array_key_exists( 'transloadit-data', $values ) ){
 		$item[ 'transloadit-data' ] = $values['transloadit-data'];
-	// }
+	}
+	
+	if ( array_key_exists( 'transloadit-file', $values ) ){
+		$item[ 'transloadit-file' ] = $values['transloadit-file'];
+	}
 	
 	// echo "<script>console.log( 'woocommerce_get_cart_item_from_session' );</script>";
 	

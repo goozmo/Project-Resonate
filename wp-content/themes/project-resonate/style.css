@@ -192,3 +192,8 @@ a.cart-contents.style-text .mini-cart-text {
 	{
 		display: inline-table;
 	}
+	
+	
+.html_visible_cart .cart_dropdown {
+	right: 20px;
+}
