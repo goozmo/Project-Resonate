@@ -213,9 +213,13 @@ function woo_after_processed( $order ){
 	// global $woocommerce
 	
 	//add_post_meta( $order->id, 'oid-'.$order->id, 'with_syrup' );
-	echo "<pre>";
-	print_r( $order );
-	echo "</pre>";
+	// echo "<pre>";
+	// print_r( $order );
+	// echo "</pre>";
+	
+	unset( $woocommerce->session->data['transloadit-data'] );
+	unset( $woocommerce->session->data['transloadit-file'] );
+	unset( $woocommerce->session->data['transloadit-name'] );
 	
 	//echo "<script>console.log( 'woocommerce_order_details_after_customer_details' );</script>";
 }
@@ -243,8 +247,8 @@ function woo_hoo_stick_it_in_there( $item_id, $values ){
 	//echo "<pre>";
 	//print_r( $values );
 	//echo "</pre>";
-
-	echo "<script>console.log( 'woocommerce_add_order_item_meta' );</script>";
+	
+	// echo "<script>console.log( 'woocommerce_add_order_item_meta' );</script>";
 }
 
 
@@ -260,6 +264,32 @@ add_filter( 'woocommerce_add_cart_item_data', 'add_cart_item_custom_data_vase', 
 function add_cart_item_custom_data_vase( $cart_item_meta, $product_id, $variation_id ) {
 
 	global $woocommerce;
+
+	$errors = array();
+	$root = (!empty($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'];
+	
+	/*
+		*
+		*	code generation
+		*
+		*
+	*/
+
+	$sound_code = rand( 0, 10000000 );
+	
+	if( file_exists( $_SERVER['DOCUMENT_ROOT'].'/wp-content/uploads/pres/' ) || is_dir( $_SERVER['DOCUMENT_ROOT'].'/wp-content/uploads/pres/' ) ){
+		$pre_array = scandir( $_SERVER['DOCUMENT_ROOT'].'/wp-content/uploads/pres/' );
+		foreach( $pre_array as $_file_ ){
+			if( $_file_ != "." && $_file_ != ".." ){
+				while( preg_match( "/$sound_code/", $_file_ ) == true ){
+					$sound_code = rand( 9999999, 10000000 );
+				}
+			}
+		}
+		// echo "<pre>";
+		// print_r( $pre_array );
+		// echo "</pre>";
+	}
 	
 	/*
 		*
@@ -267,19 +297,19 @@ function add_cart_item_custom_data_vase( $cart_item_meta, $product_id, $variatio
 		*
 		*
 	*/
-	$errors = array();
-	$root = (!empty($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'];
+	
 	if( !file_exists( $_SERVER['DOCUMENT_ROOT'].'/wp-content/uploads/pres/' ) || !is_dir( $_SERVER['DOCUMENT_ROOT'].'/wp-content/uploads/pres/' ) ){
 		mkdir( $_SERVER['DOCUMENT_ROOT'].'/wp-content/uploads/pres/', 755 );
 	}
 	
 	try{
 		$url = $_POST['transloadit-png'];
-		$img = $_SERVER['DOCUMENT_ROOT'].'/wp-content/uploads/pres/flower.png';
+		$img = $_SERVER['DOCUMENT_ROOT'].'/wp-content/uploads/pres/' . $sound_code . '.png';
 		file_put_contents($img, file_get_contents($url));
-		
-		$filepath = $root.'/wp-content/uploads/pres/flower.png';
-		
+		if( file_exists( $img ) ){
+			chmod( $img, 0644);
+		}
+		$filepath = $root.'/wp-content/uploads/pres/' . $sound_code . '.png';
 	}
 	catch( Exception $e ){
 		$filepath = $e;
@@ -294,10 +324,13 @@ function add_cart_item_custom_data_vase( $cart_item_meta, $product_id, $variatio
 		
 	try{
 		$url = $_POST['transloadit-file'];
-		$img = $_SERVER['DOCUMENT_ROOT'].'/wp-content/uploads/flower.wav';
+		$img = $_SERVER['DOCUMENT_ROOT'].'/wp-content/uploads/pres/' . $sound_code . '.wav';
 		file_put_contents($img, file_get_contents($url));
+		if( file_exists( $img ) ){
+			chmod( $img, 0644 );
+		}
 		
-		$filepath2 = $root.'/wp-content/uploads/pres/flower.wav';		
+		$filepath2 = $root.'/wp-content/uploads/pres/' . $sound_code . '.wav';		
 	}
 	catch( Exception $e ){
 		$filepath2 = $e;

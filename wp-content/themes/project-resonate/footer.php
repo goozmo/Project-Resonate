@@ -74,7 +74,8 @@
 			<?php
 
 			//copyright
-			$copyright = do_shortcode( avia_get_option('copyright', "&copy; ".__('Copyright','avia_framework')."  - <a href='".home_url('/')."'>".get_bloginfo('name')."</a>") );
+			// $copyright = do_shortcode( avia_get_option('copyright', "&copy; ".__('Copyright','avia_framework')."  - <a href='".home_url('/')."'>".get_bloginfo('name')."</a>") );
+			$copyright = "&copy; Copyright " . date( 'Y' ) . " " . get_bloginfo( 'name' ) . ". All rights reserved. ";
 
 			// you can filter and remove the backlink with an add_filter function
 			// from your themes (or child themes) functions.php file if you dont want to edit this file
@@ -185,10 +186,10 @@
 
 <?php
 
-global $woocommerce;
-echo "<pre>";
-print_r( $woocommerce );
-echo "</pre>";
+// global $woocommerce;
+// echo "<pre>";
+// print_r( $woocommerce );
+// echo "</pre>";
 
 	
 ?>
@@ -197,7 +198,7 @@ echo "</pre>";
 
 <script>
 if( document.getElementsByClassName('single-product').length < 1 ){
-	exit;
+	// return false;
 }	
 	
 var doppleganger = document.getElementsByClassName( 'variations' );

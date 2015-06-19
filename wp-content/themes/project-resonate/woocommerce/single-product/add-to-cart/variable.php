@@ -86,7 +86,7 @@ global $woocommerce, $product, $post;
 </form>
 
 <script src="//assets.transloadit.com/js/jquery.transloadit2-v2-latest.js"></script>
-<form id="transloadit-form" name="fuckkkkkk" enctype="multipart/form-data" method="post">
+<form id="transloadit-form" name="sally-struthers" enctype="multipart/form-data" method="post">
 		<input type="file" name="transloadit"/>
 		<input type="submit" />
 </form>
@@ -172,27 +172,11 @@ global $woocommerce, $product, $post;
 							transField.value = result.url;
 							woocomm.appendChild( transField );
 							
-						}
-						
-/*
-						var oData = new FormData( document.getElementById( 'transloadit-form' ) );
-						var oReq = new XMLHttpRequest();
-						oReq.open( 'POST', '/wp-content/themes/project-resonate/woocommerce/transloadit-form.php', true );
-						
-						oReq.onreadystatechange = function(){
-							if( oReq.readyState == 4 ){
-								if( oReq.status >= 200 && oReq.status < 300 || oReq.status == 304 ){
-									console.log( oReq.response );
-								}
-								else if( oReq.status > 400 ){
-									
-								}
-							}
-						}
-						oReq.send( oData );
-*/
-							
-						
+						}						
+					},
+					onSuccess : function( assembly ){
+						console.log( assembly.results );
+						console.log( assembly );
 					}
 				});
 				// console.log( 'true' );

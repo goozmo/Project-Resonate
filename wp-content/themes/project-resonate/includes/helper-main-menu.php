@@ -84,7 +84,7 @@ if($headerS['header_topbar'] == true)
         /*
         * Hook that can be used for plugins and theme extensions (currently:  the woocommerce shopping cart)
         */
-        do_action('ava_main_header');
+        // do_action('ava_main_header');
         if($headerS['header_position'] != "header_top") do_action('ava_main_header_sidebar');
 		?>
 	
@@ -111,8 +111,8 @@ if($headerS['header_topbar'] == true)
 						?>
 						
 						<div class="shopping-cart-bag">	
-							<span class="css-cart-strap"></span>
-							<a class="cart-contents style-text" href="#" title="View your shopping cart"><div class="mini-cart-text">0</div></a>
+							<span class="css-cart-strap cart_dropdown_first"></span>
+							<a class="cart-contents style-text cart_dropdown_link" href="<?php echo WC()->cart->get_cart_url(); ?>" title="View your shopping cart"><div class="mini-cart-text"><?php echo WC()->cart->cart_contents_count; ?></div></a>
 						</div>
 						
 						<?php
