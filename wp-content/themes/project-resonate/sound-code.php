@@ -42,10 +42,10 @@ global $avia_config;
 					
 					<?php
 						
-						if( isset( $_POST['pres-soundcode'] ) ){
+						if( isset( $_POST['pres-soundcode'] ) || isset( $_GET['pres-soundcode'] ) ){
 							// print_r( $_POST['pres-soundcode'] );
 							
-							$_sound_code_ = $_POST['pres-soundcode'];
+							$_sound_code_ = $_POST['pres-soundcode'] || $_GET['pres-soundcode'];
 							$_img_file_ = NULL;
 							$_aud_file_ = NULL;
 							
@@ -86,9 +86,11 @@ global $avia_config;
 							
 							<audio controls class="_goo-transloadit-audio">
 								<?php
+									$_aud_type_ = 'wav';
 									if( preg_match('/^.*\.(wav)$/i', $_aud_file_) ){
 										$_aud_type_ = 'wav';
 									}
+									
 								?>
 								<source src="/wp-content/uploads/pres/<?php echo $_aud_file_; ?>" type="audio/<?php echo $_aud_type_; ?>" />
 							</audio>

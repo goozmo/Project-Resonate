@@ -197,3 +197,151 @@ a.cart-contents.style-text .mini-cart-text {
 .html_visible_cart .cart_dropdown {
 	right: 20px;
 }
+
+
+.woocommerce-page.archive #main
+{
+	margin-top: 50px;
+}
+
+.woocommerce-page.archive #main .how-to-list li
+{
+	padding-bottom: 10px;
+	line-height: 1.2em;
+}
+
+.woocommerce-page.archive #main .how-to-list span
+{
+	color: rgb( 239, 118, 34 );
+	font-size: 1.2em;
+	font-weight: bold;
+}
+
+#main ul
+{
+	margin-left: 0;
+}
+
+.woocommerce-checkout .order_details dt.variation-your-sound-code
+{
+	margin-top: 10px;
+	margin-bottom: 10px;
+	font-size: 1.5em;
+}
+
+.woocommerce-checkout .order_details dd.variation-your-sound-code
+{
+	margin-top: 10px;
+	margin-bottom: 10px;
+	font-size: 2em;
+	color: rgb( 239, 118, 34 );
+	font-weight: bold;
+	margin-left: 10px;
+}
+
+@media screen and ( max-width: 492px ){
+	.woocommerce-checkout .order_details dd.variation-your-sound-code
+	{
+		margin-left: 0;
+	}
+}
+
+#pres-soundcode-form input#pres-soundcode
+{
+	width: 90%;
+}
+
+#pres-soundcode-form input[type='submit'],
+#home-soundcode input[type='submit']
+{
+	font-size: 1.2em;
+	
+	-webkit-transition: background-color 0.2s ease-in-out;
+	transition: background-color 0.2s ease-in-out;
+	
+	border-radius: 2px;
+	
+}
+
+#home-soundcode input[name="pres-soundcode"]
+{
+	width: 40%;
+	margin: 0 auto;
+	text-align: center;
+	color: rgb( 90,90,90 ) !important;
+}
+
+#home-soundcode input[type="submit"]
+{
+	margin: 0 auto;
+	display: block;
+	margin-top: 20px;
+}
+
+#top #wrap_all  #_goo-soundcodecall .av-special-heading-h3 h3.av-special-heading-tag
+{
+	margin-bottom: 10px;
+}
+
+#footer #menu-main-menu li
+{
+	padding-right: 4%;
+}
+
+#footer #menu-main-menu li:last-of-type
+{
+	padding-right: none;
+}
+
+#footer ul.social li
+{
+	display: inline-table;
+	font-size: 1.6em;
+	padding-left: 4%;
+}
+
+#footer * a:hover
+{
+	color: rgb( 239, 118, 34 );
+	text-decoration: none;
+}
+
+.single_variation_wrap
+{
+	margin-left: 0;
+	margin-top: 40px;
+}
+
+.pres-upload-button .button
+{
+	color: 
+}
+
+
+
+
+
+
+
+#transloadit-form
+{
+	margin: 40px 0;
+	overflow: hidden;
+}
+
+#transloadit-form._goo-acitve
+{
+	max-height: 500px;
+}
+
+#transloadit-form._goo-inactive
+{
+	max-height: 0;
+	
+}
+
+.transloadit-form-container
+{
+	padding: 40px;
+	border: 1px solid rgb( 90,90,90 );
+}

@@ -197,138 +197,170 @@
 
 
 <script>
-if( document.getElementsByClassName('single-product').length < 1 ){
-	// return false;
-}	
+if( document.getElementsByClassName('single-product').length > 0 ){
 	
-var doppleganger = document.getElementsByClassName( 'variations' );
-for( var i=0, n=doppleganger.length; i<n; i++ ){
-	doppleganger[i].addEventListener( 'change', function(){
-		candyShopInst.clickFunc();
-	});
-}
-
-var _cjTransitionProp = candyjar.api.evCSSanimationProperty( [ 'transition', 'webkitTransition', 'otransition' ] ),
-_cjTransitionEndProp = candyjar.api.evCSSanimationProperty( ['transitionend', 'webkitTransitionEnd', 'otransitionend', 'transitionend'] ),
-_cjTransformProp = candyjar.api.evCSSanimationProperty( ['transform', 'msTransform', 'webkitTransform', 'mozTransform', 'oTranform'] ), 
-requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
-
-candyShopInst = {
+	var doppleganger = document.getElementsByClassName( 'variations' );
+	for( var i=0, n=doppleganger.length; i<n; i++ ){
+		doppleganger[i].addEventListener( 'change', function(){
+			candyShopInst.clickFunc();
+		});
+	}
 	
-	_preloaded : false,
-	thisImg : "",
-	thisBand : "",
-	thisBead : "",
-	theseImg : {
-		"black-rubber-orange-opaque" 			: "/wp-content/uploads/2015/06/BlackOrange-450x350.png",
-		"black-rubber-black-opaque" 			: "/wp-content/uploads/2015/06/blackblack-450x300.png",
-		"black-rubber-white-opaque" 			: "/wp-content/uploads/2015/06/blackwhite-450x300.png",
-		"black-rubber-pink-translucent" 		: "/wp-content/uploads/2015/06/blackpink-450x300.png",
-		"black-rubber-green-translucent" 		: "/wp-content/uploads/2015/06/blackgreen-450x300.png",
-		"black-rubber-blue-translucent" 		: "/wp-content/uploads/2015/06/Blackblue-450x300.png",
+	var _cjTransitionProp = candyjar.api.evCSSanimationProperty( [ 'transition', 'webkitTransition', 'otransition' ] ),
+	_cjTransitionEndProp = candyjar.api.evCSSanimationProperty( ['transitionend', 'webkitTransitionEnd', 'otransitionend', 'transitionend'] ),
+	_cjTransformProp = candyjar.api.evCSSanimationProperty( ['transform', 'msTransform', 'webkitTransform', 'mozTransform', 'oTranform'] ), 
+	requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+	
+	candyShopInst = {
 		
-		"white-rubber-orange-opaque" 			: "/wp-content/uploads/2015/06/whiteorange-450x300.png",
-		"white-rubber-black-opaque" 			: "/wp-content/uploads/2015/06/blackblack-450x300.png",
-		"white-rubber-white-opaque" 			: "/wp-content/uploads/2015/06/whitewhite-450x344.png",
-		"white-rubber-pink-translucent" 		: "/wp-content/uploads/2015/06/whitepink-450x300.png",
-		"white-rubber-green-translucent" 		: "/wp-content/uploads/2015/06/whitegreen-450x300.png",
-		"white-rubber-blue-translucent" 		: "/wp-content/uploads/2015/06/whiteblue-450x300.png",
+		_preloaded : false,
+		thisImg : "",
+		thisBand : "",
+		thisBead : "",
+		theseImg : {
+			"black-rubber-orange-opaque" 			: "/wp-content/uploads/2015/06/BlackOrange-450x350.png",
+			"black-rubber-black-opaque" 			: "/wp-content/uploads/2015/06/blackblack-450x300.png",
+			"black-rubber-white-opaque" 			: "/wp-content/uploads/2015/06/blackwhite-450x300.png",
+			"black-rubber-pink-translucent" 		: "/wp-content/uploads/2015/06/blackpink-450x300.png",
+			"black-rubber-green-translucent" 		: "/wp-content/uploads/2015/06/blackgreen-450x300.png",
+			"black-rubber-blue-translucent" 		: "/wp-content/uploads/2015/06/Blackblue-450x300.png",
+			
+			"white-rubber-orange-opaque" 			: "/wp-content/uploads/2015/06/whiteorange-450x300.png",
+			"white-rubber-black-opaque" 			: "/wp-content/uploads/2015/06/blackblack-450x300.png",
+			"white-rubber-white-opaque" 			: "/wp-content/uploads/2015/06/whitewhite-450x344.png",
+			"white-rubber-pink-translucent" 		: "/wp-content/uploads/2015/06/whitepink-450x300.png",
+			"white-rubber-green-translucent" 		: "/wp-content/uploads/2015/06/whitegreen-450x300.png",
+			"white-rubber-blue-translucent" 		: "/wp-content/uploads/2015/06/whiteblue-450x300.png",
+			
+			"silver-chain-orange-opaque" 			: "/wp-content/uploads/2015/06/chainorange-450x300.png",
+			"silver-chain-black-opaque" 			: "/wp-content/uploads/2015/06/chainblack-450x300.png",
+			"silver-chain-white-opaque" 			: "/wp-content/uploads/2015/06/chainwhite-450x300.png",
+			"silver-chain-pink-translucent" 		: "/wp-content/uploads/2015/06/chainpink-450x330.png",
+			"silver-chain-green-translucent" 		: "/wp-content/uploads/2015/06/chaingreen-450x300.png",
+			"silver-chain-blue-translucent" 		: "/wp-content/uploads/2015/06/chainblue-450x300.png",
+		},
 		
-		"silver-chain-orange-opaque" 			: "/wp-content/uploads/2015/06/chainorange-450x300.png",
-		"silver-chain-black-opaque" 			: "/wp-content/uploads/2015/06/chainblack-450x300.png",
-		"silver-chain-white-opaque" 			: "/wp-content/uploads/2015/06/chainwhite-450x300.png",
-		"silver-chain-pink-translucent" 		: "/wp-content/uploads/2015/06/chainpink-450x330.png",
-		"silver-chain-green-translucent" 		: "/wp-content/uploads/2015/06/chaingreen-450x300.png",
-		"silver-chain-blue-translucent" 		: "/wp-content/uploads/2015/06/chainblue-450x300.png",
-	},
-	
-	init : function(){
-		this.thisImg = document.getElementById( '_goo-imageThing-img' );
-		this.thisBand = document.getElementsByName( 'attribute_band-color' );
-		this.thisBead = document.getElementsByName( 'attribute_bead-color' );
-		this.getImage();
-	},
-	
-	clickFunc : function(){
-		
-		this.getImage();
-
-	},
-	
-	getVals : function(){
-		for( var i=0, n=this.thisBand.length; i<n; i++ ){
-			if( this.thisBand[i].checked ){
-				var currentBand = this.thisBand[i].value;
-				break;
+		init : function(){
+			this.thisImg = document.getElementById( '_goo-imageThing-img' );
+			this.thisBand = document.getElementsByName( 'attribute_band-color' );
+			this.thisBead = document.getElementsByName( 'attribute_bead-color' );
+			this.getImage();
+			
+			var img_preloader = document.createElement( 'img' );
+			var mcgoober = this.theseImg;
+			
+			for( var i=0, n=this.theseImg.length; i<n; i++ ){
+				console.log( i );
 			}
-		}
-		for( var i=0, n=this.thisBead.length; i<n; i++ ){
-			if( this.thisBead[i].checked ){
-				var currentBead = this.thisBead[i].value;
-				break;
-			}
-		}
+			
+		},
 		
-		return {
-			'band' : currentBand,
-			'bead' : currentBead
-		}	
-	},
+		clickFunc : function(){
+			
+			this.getImage();
 	
-	getImage : function(){
+		},
 		
-		var vals = this.getVals();
-		
-		var val = vals.band + "-" + vals.bead;
-		
-		if( this.theseImg[val] ){
-			var updateIMG = this.theseImg[val];
-			// console.log( updateIMG );
-		}
-		
-		
-		
-		if( updateIMG ){
-			// console.log( _cjTransitionProp );
-			var _processing = false;
-			this.thisImg.style[_cjTransitionProp] = "opacity 0.2s ease-in-out";
-			if( this._preloaded ){
-				if( _processing === false ){
-					this.thisImg.style.opacity = 0;
-					this.thisImg.addEventListener( _cjTransitionEndProp, function(){
-					
-						candyShopInst.thisImg.src = updateIMG;
-						// console.log( document.getElementById( '_goo-imageThing-img' ).src );
-						//console.log( typeof shoeshiner );
-						if( typeof shoeshiner !== 'undefined' ){
-							clearInterval( shoeshiner );
-						}
-						shoeshiner = setInterval(function(){
-							_processing = true;
-							if( document.getElementById( '_goo-imageThing-img' ).src == "http://resonate.lsp.goozmo.com" + updateIMG ){
-								candyShopInst.thisImg.style.opacity = 1;
-								clearInterval( shoeshiner );
-								// console.log( 'got' );
-								_processing = false;
-							}
-						}, 200)
-						// console.log( 'monkey' );
-					}, false );
+		getVals : function(){
+			for( var i=0, n=this.thisBand.length; i<n; i++ ){
+				if( this.thisBand[i].checked ){
+					var currentBand = this.thisBand[i].value;
+					break;
 				}
 			}
-			else{
-				this.thisImg.src = updateIMG;
-				this._preloaded = true;
-				// console.log( 'poop' );
+			for( var i=0, n=this.thisBead.length; i<n; i++ ){
+				if( this.thisBead[i].checked ){
+					var currentBead = this.thisBead[i].value;
+					break;
+				}
 			}
+			
+			return {
+				'band' : currentBand,
+				'bead' : currentBead
+			}	
+		},
+		
+		getImage : function(){
+			
+			var vals = this.getVals();
+			
+			var val = vals.band + "-" + vals.bead;
+			
+			if( this.theseImg[val] ){
+				var updateIMG = this.theseImg[val];
+				// console.log( updateIMG );
+			}
+			
+			
+			
+			if( updateIMG ){
+				// console.log( _cjTransitionProp );
+				var _processing = false;
+				this.thisImg.style[_cjTransitionProp] = "opacity 0.2s ease-in-out";
+				if( this._preloaded ){
+					if( _processing === false ){
+						this.thisImg.style.opacity = 0;
+						this.thisImg.addEventListener( _cjTransitionEndProp, function(){
+						
+							candyShopInst.thisImg.src = updateIMG;
+							// console.log( document.getElementById( '_goo-imageThing-img' ).src );
+							//console.log( typeof shoeshiner );
+							if( typeof shoeshiner !== 'undefined' ){
+								clearInterval( shoeshiner );
+							}
+							shoeshiner = setInterval(function(){
+								_processing = true;
+								if( document.getElementById( '_goo-imageThing-img' ).src == "http://resonate.lsp.goozmo.com" + updateIMG ){
+									candyShopInst.thisImg.style.opacity = 1;
+									clearInterval( shoeshiner );
+									// console.log( 'got' );
+									_processing = false;
+								}
+							}, 200)
+							// console.log( 'monkey' );
+						}, false );
+					}
+				}
+				else{
+					this.thisImg.src = updateIMG;
+					this._preloaded = true;
+					// console.log( 'poop' );
+				}
+			}
+			
 		}
 		
 	}
 	
+	candyShopInst.init();
 }
-
-candyShopInst.init();
 </script>
+
+<div style="display:none !important">
+	
+<img src="/wp-content/uploads/2015/06/BlackOrange-450x350.png" alt=""/>
+<img src="/wp-content/uploads/2015/06/blackblack-450x300.png" alt=""/>
+<img src="/wp-content/uploads/2015/06/blackwhite-450x300.png" alt=""/>
+<img src="/wp-content/uploads/2015/06/blackpink-450x300.png" alt=""/>
+<img src="/wp-content/uploads/2015/06/blackgreen-450x300.png" alt=""/>
+<img src="/wp-content/uploads/2015/06/Blackblue-450x300.png" alt=""/>
+
+<img src="/wp-content/uploads/2015/06/whiteorange-450x300.png" alt=""/>
+<img src="/wp-content/uploads/2015/06/blackblack-450x300.png" alt=""/>
+<img src="/wp-content/uploads/2015/06/whitewhite-450x344.png" alt=""/>
+<img src="/wp-content/uploads/2015/06/whitepink-450x300.png" alt=""/>
+<img src="/wp-content/uploads/2015/06/whitegreen-450x300.png" alt=""/>
+<img src="/wp-content/uploads/2015/06/whiteblue-450x300.png" alt=""/>
+
+<img src="/wp-content/uploads/2015/06/chainorange-450x300.png" alt=""/>
+<img src="/wp-content/uploads/2015/06/chainblack-450x300.png" alt=""/>
+<img src="/wp-content/uploads/2015/06/chainwhite-450x300.png" alt=""/>
+<img src="/wp-content/uploads/2015/06/chainpink-450x330.png" alt=""/>
+<img src="/wp-content/uploads/2015/06/chaingreen-450x300.png" alt=""/>
+<img src="/wp-content/uploads/2015/06/chainblue-450x300.png" alt=""/>
+	
+</div>
 
 </body>
 </html>

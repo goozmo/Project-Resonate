@@ -198,7 +198,13 @@ remove_action( 'woocommerce_sidebar', 'woocommerce_get_sidebar', 10);
 
 add_action( 'woocommerce_before_add_to_cart_button', 'add_transloadit_field' );
 function add_transloadit_field(){
+?>
+	<div class="pres-upload-button" id="pres-upload-button-inst1">
+		<button class="button">Upload a Sound File</button>
+		<div style="width: 100%; clear: both;"></div>
+	</div>
 
+<?php
 }
 
 
@@ -240,9 +246,9 @@ function woo_hoo_stick_it_in_there( $item_id, $values ){
 	$cust_vals = WC()->session->get('transloadit-data');
 	$cust_vals2 = WC()->session->get('transloadit-file');
 	$cust_vals3 = WC()->session->get('transloadit-name');
-	wc_add_order_item_meta( $item_id, 'transloadit-png', $cust_vals );
-	wc_add_order_item_meta( $item_id, 'transloadit-file', $cust_vals2 );
-	wc_add_order_item_meta( $item_id, 'transloadit-name', $cust_vals3 );
+	wc_add_order_item_meta( $item_id, 'waveform-image', $cust_vals );
+	wc_add_order_item_meta( $item_id, 'sound-file', $cust_vals2 );
+	wc_add_order_item_meta( $item_id, 'your-sound-code', $cust_vals3 );
 	
 	//echo "<pre>";
 	//print_r( $values );
@@ -345,15 +351,15 @@ function add_cart_item_custom_data_vase( $cart_item_meta, $product_id, $variatio
 			"file" => $filepath2,
 			"display" => "Toots McScoots",
 			"errors" => $errors,
-			"fileName" => $_POST['transloadit-name']
+			"fileName" => $sound_code
 		),
 	);
 	
-	$cart_item_meta["transloadit-name"] = $transloadit[0]['fileName'];
+	$cart_item_meta["transloadit-name"] = $sound_code;
 	$cart_item_meta["transloadit-data"] = $transloadit[0]['value'];
 	$cart_item_meta["transloadit-file"] = $transloadit[0]['file'];
 	
-	WC()->session->set("transloadit-name", $transloadit[0]['fileName'] );	
+	WC()->session->set("transloadit-name", $sound_code );	
 	WC()->session->set("transloadit-data", $transloadit[0]['value'] );
 	WC()->session->set("transloadit-file", $transloadit[0]['file'] );
 	

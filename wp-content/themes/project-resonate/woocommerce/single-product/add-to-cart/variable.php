@@ -68,7 +68,9 @@ global $woocommerce, $product, $post;
 				<?php woocommerce_quantity_input(); ?>
 				<button type="submit" class="single_add_to_cart_button button alt"><?php echo $product->single_add_to_cart_text(); ?></button>
 			</div>
-
+			
+			<input id="_goo-valid" type="hidden" required="true" value=""/>
+			
 			<input type="hidden" name="add-to-cart" value="<?php echo $product->id; ?>" />
 			<input type="hidden" name="product_id" value="<?php echo esc_attr( $post->ID ); ?>" />
 			<input type="hidden" name="variation_id" value="" />
@@ -87,13 +89,56 @@ global $woocommerce, $product, $post;
 
 <script src="//assets.transloadit.com/js/jquery.transloadit2-v2-latest.js"></script>
 <form id="transloadit-form" name="sally-struthers" enctype="multipart/form-data" method="post">
-		<input type="file" name="transloadit"/>
+	<div class="transloadit-form-container">
+		
+		<h5>Upload a .wav, .ogg, .m4p or .mov file</h5>
+		<br/>
+		<input type="file" name="transloadit" required="true" />
 		<input type="submit" />
+	</div>
 </form>
 	<script>
 		//console.log( '<?php echo $audioFile; ?>' );
 
 
+_goo_variation_inst = {
+	
+	upload_form : "",
+	
+	init : function(){
+		
+		this.upload_form = document.getElementById( 'transloadit-form' );
+		pre_class = this.upload_form.className;
+		this.upload_form.className = pre_class + " _goo-inactive"; 
+		
+		jQuery( '.pres-upload-button' ).on( 'click', 'button', function( event ){
+			event.preventDefault();
+			_goo_variation_inst.do_clicky();
+			
+		});
+		
+	},
+	
+	do_clicky : function(){
+		
+		if( this.upload_form.className.match(/_goo-active/gi) ){
+			candyjar.api.declassify( this.upload_form, '_goo-active' );
+			candyjar.api.classify( this.upload_form, '_goo-inactive' );
+			console.log( '1' );
+		}
+		else{
+			candyjar.api.classify( this.upload_form, '_goo-active' );
+			candyjar.api.declassify( this.upload_form, '_goo-inactive' );
+			console.log( '2' );
+		}	
+		
+		
+		console.log( this.upload_form );
+		
+	}
+}
+
+_goo_variation_inst.init();
 
 /*
 	jQuery.ajax( '/wp-content/themes/project-resonate/woocommerce/transloadit-form.js', {
@@ -108,79 +153,82 @@ global $woocommerce, $product, $post;
 	});	
 */
 
-			jQuery(function(){
-				jQuery('#transloadit-form').transloadit({
-					wait : true,
-					triggerUploadOnFileSelection : true,
-					params : {
-						auth : {
-							key: "b15a103003e211e5a7cb1199b0923661"
-						},
-						steps : {
-							mp3: {
-								use: ":original",
-								robot: "/audio/encode",
-								preset: "mp3"
-        					},
-							waveform : {
-								robot : "/audio/waveform",
-								use : "mp3",
-								width : 500,
-								height : 200,
-								background_color : "000000",
-								outer_color : "cccccc",
-								center_color : "ffffff"
-							}
-						},
-						notify_url : window.location.href
-					},
-					autoSubmit : false,
-					onUpload : function( upload ){
-						// console.log( upload );
-						
-						var woocomm = document.getElementsByClassName( 'variations_form cart' );
-						if( woocomm.length > 0 ){
-							
-							woocomm = woocomm[0];
-							
-							var transField = document.createElement( 'input' );
-							transField.type = 'hidden';
-							transField.name = 'transloadit-file';
-							transField.value = upload.url;
-							woocomm.appendChild( transField );
-							
-							var transName = document.createElement( 'input' );
-							transName.type = 'hidden';
-							transName.name = 'transloadit-name';
-							transName.value = upload.name;
-							woocomm.appendChild( transName );
-							
-						}
-					},
-					onResult : function( step, result ){
-						// console.log( step );
-						// console.log( result );
-						
-						var woocomm = document.getElementsByClassName( 'variations_form cart' );
-						if( woocomm.length > 0 ){
-							
-							woocomm = woocomm[0];
-							
-							var transField = document.createElement( 'input' );
-							transField.type = 'hidden';
-							transField.name = 'transloadit-png';
-							transField.value = result.url;
-							woocomm.appendChild( transField );
-							
-						}						
-					},
-					onSuccess : function( assembly ){
-						console.log( assembly.results );
-						console.log( assembly );
-					}
-				});
-				// console.log( 'true' );
-			});
+jQuery(function(){
+	jQuery('#transloadit-form').transloadit({
+		wait : true,
+		triggerUploadOnFileSelection : true,
+		params : {
+			auth : {
+				key: "b15a103003e211e5a7cb1199b0923661"
+			},
+			steps : {
+				mp3: {
+					use: ":original",
+					robot: "/audio/encode",
+					preset: "mp3"
+				},
+				waveform : {
+					robot : "/audio/waveform",
+					use : "mp3",
+					width : 500,
+					height : 200,
+					background_color : "000000",
+					outer_color : "cccccc",
+					center_color : "ffffff"
+				}
+			},
+			notify_url : window.location.href
+		},
+		autoSubmit : false,
+		onUpload : function( upload ){
+			// console.log( upload );
+			
+			var woocomm = document.getElementsByClassName( 'variations_form cart' );
+			if( woocomm.length > 0 ){
+				
+				woocomm = woocomm[0];
+				
+				var transField = document.createElement( 'input' );
+				transField.type = 'hidden';
+				transField.name = 'transloadit-file';
+				transField.value = upload.url;
+				woocomm.appendChild( transField );
+				
+				var transName = document.createElement( 'input' );
+				transName.type = 'hidden';
+				transName.name = 'transloadit-name';
+				transName.value = upload.name;
+				woocomm.appendChild( transName );
+				
+			}
+		},
+		onResult : function( step, result ){
+			// console.log( step );
+			// console.log( result );
+			
+			var woocomm = document.getElementsByClassName( 'variations_form cart' );
+			if( woocomm.length > 0 ){
+				
+				woocomm = woocomm[0];
+				
+				var transField = document.createElement( 'input' );
+				transField.type = 'hidden';
+				transField.name = 'transloadit-png';
+				transField.value = result.url;
+				transField.setAttribute( 'required', 'true' );
+				woocomm.appendChild( transField );
+				
+			}						
+		},
+		onSuccess : function( assembly ){
+			console.log( assembly.results );
+			console.log( assembly );
+			
+			document.getElementById('_goo-valid').parentNode.removeChild( document.getElementById('_goo-valid') );
+		}
+	});
+	// console.log( 'true' );
+});
 		
 </script>
 
