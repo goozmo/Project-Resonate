@@ -121,7 +121,6 @@
 
                                 wp_nav_menu($args);
                             echo "</nav>";
-        
                         ?>
 
                     </div>
@@ -226,7 +225,7 @@ if( document.getElementsByClassName('single-product').length > 0 ){
 			"black-rubber-blue-translucent" 		: "/wp-content/uploads/2015/06/Blackblue-450x300.png",
 			
 			"white-rubber-orange-opaque" 			: "/wp-content/uploads/2015/06/whiteorange-450x300.png",
-			"white-rubber-black-opaque" 			: "/wp-content/uploads/2015/06/blackblack-450x300.png",
+			"white-rubber-black-opaque" 			: "/wp-content/uploads/blackbracelet-450x350.png",
 			"white-rubber-white-opaque" 			: "/wp-content/uploads/2015/06/whitewhite-450x344.png",
 			"white-rubber-pink-translucent" 		: "/wp-content/uploads/2015/06/whitepink-450x300.png",
 			"white-rubber-green-translucent" 		: "/wp-content/uploads/2015/06/whitegreen-450x300.png",
@@ -347,7 +346,7 @@ if( document.getElementsByClassName('single-product').length > 0 ){
 <img src="/wp-content/uploads/2015/06/Blackblue-450x300.png" alt=""/>
 
 <img src="/wp-content/uploads/2015/06/whiteorange-450x300.png" alt=""/>
-<img src="/wp-content/uploads/2015/06/blackblack-450x300.png" alt=""/>
+<img src="/wp-content/uploads/blackbracelet-450x350.png" alt=""/>
 <img src="/wp-content/uploads/2015/06/whitewhite-450x344.png" alt=""/>
 <img src="/wp-content/uploads/2015/06/whitepink-450x300.png" alt=""/>
 <img src="/wp-content/uploads/2015/06/whitegreen-450x300.png" alt=""/>

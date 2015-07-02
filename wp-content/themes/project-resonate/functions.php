@@ -19,7 +19,7 @@ function theme_enqueue_styles() {
     wp_enqueue_style( 'parent-style', get_template_directory_uri() . '/style.css' );
     wp_enqueue_style( 'child-style', get_stylesheet_directory_uri() . '/style.css',array('parent-style'));
     wp_enqueue_style( 'font-awesome', get_stylesheet_directory_uri() . '/font-awesome-4.3.0/css/font-awesome.min.css', array());
-    wp_enqueue_script( 'theme-functions-js', get_stylesheet_directory_uri() . '/js/functions.min.js', array(), '1', true );
+    wp_enqueue_script( 'theme-functions-js', get_stylesheet_directory_uri() . '/js/functions.min.js', array(), '1', false );
 }
 
 include( 'includes/http-redirect/index.php' );
@@ -164,11 +164,30 @@ add_action( 'widgets_init', 'goo_load_widget' );
 remove_action( 'woocommerce_sidebar', 'woocommerce_get_sidebar', 10);
 
 
-
-
-
-
-
+function _goo_login_button( $atts ){
+	
+	$url = "";
+	$link_text = "";
+	
+	if( is_user_logged_in() ){
+		$url = wp_logout_url();
+		$link_text = "Logout";
+	}
+	else{
+		$url = wp_login_url();
+		$link_text = "Login";
+	}
+	
+	$output = "";
+	$output.= "<a href='";
+	$output.= $url;
+	$output.= "' class='_goo-login-button' >";
+	$output.= $link_text;
+	$output.= "</a>";
+	
+	return $output;
+}
+add_shortcode( '_goo_login_button', '_goo_login_button' );
 
 
 
@@ -190,22 +209,11 @@ remove_action( 'woocommerce_sidebar', 'woocommerce_get_sidebar', 10);
 
 
 /*
-	*
-	*	insert stuff before the cart button
-	*
+	*	Woocommerce Stuff
 	*
 */
 
-add_action( 'woocommerce_before_add_to_cart_button', 'add_transloadit_field' );
-function add_transloadit_field(){
-?>
-	<div class="pres-upload-button" id="pres-upload-button-inst1">
-		<button class="button">Upload a Sound File</button>
-		<div style="width: 100%; clear: both;"></div>
-	</div>
 
-<?php
-}
 
 
 /*
@@ -243,18 +251,23 @@ function woo_hoo_stick_it_in_there( $item_id, $values ){
 	global $woocommerce;
 	
 	// $cust_vals = $values['transloadit-data'];
-	$cust_vals = WC()->session->get('transloadit-data');
-	$cust_vals2 = WC()->session->get('transloadit-file');
-	$cust_vals3 = WC()->session->get('transloadit-name');
+	// $cust_vals = WC()->session->get('transloadit-data');
+	// $cust_vals2 = WC()->session->get('transloadit-file');
+	// $cust_vals3 = WC()->session->get('transloadit-name');
+	
+	$cust_vals = $values['transloadit-data'];
+	$cust_vals2 = $values['transloadit-file'];
+	$cust_vals3 = $values['transloadit-name'];
+	
 	wc_add_order_item_meta( $item_id, 'waveform-image', $cust_vals );
 	wc_add_order_item_meta( $item_id, 'sound-file', $cust_vals2 );
 	wc_add_order_item_meta( $item_id, 'your-sound-code', $cust_vals3 );
 	
-	//echo "<pre>";
-	//print_r( $values );
-	//echo "</pre>";
+	echo "<pre>";
+	print_r( $values );
+	echo "</pre>";
 	
-	// echo "<script>console.log( 'woocommerce_add_order_item_meta' );</script>";
+	echo "<script>console.log( 'woocommerce_add_order_item_meta' );</script>";
 }
 
 
@@ -359,17 +372,18 @@ function add_cart_item_custom_data_vase( $cart_item_meta, $product_id, $variatio
 	$cart_item_meta["transloadit-data"] = $transloadit[0]['value'];
 	$cart_item_meta["transloadit-file"] = $transloadit[0]['file'];
 	
-	WC()->session->set("transloadit-name", $sound_code );	
-	WC()->session->set("transloadit-data", $transloadit[0]['value'] );
-	WC()->session->set("transloadit-file", $transloadit[0]['file'] );
+	WC()->session->set( "transloadit-name", $sound_code );	
+	WC()->session->set( "transloadit-data", $transloadit[0]['value'] );
+	WC()->session->set( "transloadit-file", $transloadit[0]['file'] );
 	
-	return $cart_item_meta; 
+	return $cart_item_meta;
+	
 }
 
 
 /*
 	*
-	* on view cart
+	* on always
 	*
 	*
 */
@@ -377,9 +391,9 @@ function add_cart_item_custom_data_vase( $cart_item_meta, $product_id, $variatio
 add_filter( 'woocommerce_get_cart_item_from_session', 'get_cart_items_from_session', 1, 3 );
 function get_cart_items_from_session( $item, $values, $key ) {
 	
-	//echo "<pre>";
-	//print_r( $values );
-	//echo "</pre>";
+	// echo "<pre>";
+	// print_r( $values );
+	// echo "</pre>";
 	
 	if ( array_key_exists( 'transloadit-name', $values ) ){
 		$item[ 'transloadit-name' ] = $values['transloadit-name'];
@@ -396,6 +410,357 @@ function get_cart_items_from_session( $item, $values, $key ) {
 	// echo "<script>console.log( 'woocommerce_get_cart_item_from_session' );</script>";
 	
 	return $item;
+}
+
+
+
+
+
+
+
+
+
+
+add_action( 'woocommerce_add_to_cart_validation', 'goo_validate', 1, 5 );
+function goo_validate(){
+	
+	if( !isset( $_POST['transloadit-file'] ) || empty( $_POST['transloadit-file'] ) ){
+		$product = get_product( $product_id );
+		$product_title = $product->post->post_title;
+		wc_add_notice( "You need to upload a file... or else!" );
+	}
+	else{
+		return true;
+	}
+	
+}
+
+add_action( 'woocommerce_before_add_to_cart_button', 'goo_price_output' );
+function goo_price_output(){
+	
+	global $product;
+	
+	?>
+	<div class="pres-upload-button" id="pres-upload-button-inst1">
+		<button class="button">Upload a sound file</button>
+		<span class="arrow-thing fa fa-angle-down">&nbsp;Upload an audio or video file in the form below</span>
+		<div style="width: 100%; clear: both;"></div>
+	</div>
+	
+	<div class="_goo-cart-price-output">
+		<?php echo $product->get_price_html(); ?>
+	</div>
+	<?php
+}
+
+add_action( 'woocommerce_after_add_to_cart_form', 'goo_form_output' );
+function goo_form_output(){
+?>
+<script src="//assets.transloadit.com/js/jquery.transloadit2-v2-latest.js"></script>
+<form id="transloadit-form" name="sally-struthers" enctype="multipart/form-data" method="post">
+	<div class="transloadit-form-container">
+		
+		<h5>To Upload a file, click "choose file" on the form below, select a file &amp; click open or enter.  For more detailed info on creating an accepted sound file, visit our <a href="/q-a">Q & A page</a></h5><br/>
+		<h5>Accepted file types .wav, .ogg, .m4v or .mov file</h5>
+		<br/>
+		<input type="file" name="transloadit" required="true" pattern="(.wav|.ogg|.m4p|.mov)$"/>
+		<input type="submit" />
+		<div style="width: 100%; clear: both;"></div>
+	</div>
+	
+</form>
+<script>
+//console.log( '<?php echo $audioFile; ?>' );
+
+_goo_variation_inst = {
+	
+	upload_form : "",
+	
+	_cjTransitionProp : candyjar.api.evCSSanimationProperty( ['transition', 'webkitTransition', 'otransition', 'transition'] ),  
+	
+	_cjTransitionEndProp : candyjar.api.evCSSanimationProperty( ['transitionend', 'webkitTransitionEnd', 'otransitionend', 'transitionend'] ),
+	
+	_cjTransformProp : candyjar.api.evCSSanimationProperty( ['transform', 'msTransform', 'webkitTransform', 'mozTransform', 'oTranform'] ), 
+	
+	requestAnimationFrame : window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame,
+	
+	init : function(){
+		
+		// console.log( this._cjTransitionProp );
+		
+		
+		this.upload_form = document.getElementById( 'transloadit-form' );
+		pre_class = this.upload_form.className;
+		this.upload_form.className = pre_class + " _goo-inactive"; 
+		
+		console.log( this.upload_form.style[ this._cjTransformProp ] );
+		
+		if( this.upload_form.style[ this._cjTransformProp ] === "" || this.upload_form.style[ this._cjTransformProp ] === "undefined" || this.upload_form.style[ this._cjTransformProp ] === null ){
+			this.upload_form.style[ this._cjTransitionProp ] = "max-height 0.2s ease-in-out";
+		}
+		
+		jQuery( '.pres-upload-button' ).on( 'click', 'button', function( event ){
+			event.preventDefault();
+			_goo_variation_inst.do_clicky();
+			
+		});
+		this.animate( 0 );
+		
+	},
+	
+	do_clicky : function(){
+		
+		if( this.upload_form.className.match(/_goo-active/gi) ){
+			
+			candyjar.api.declassify( this.upload_form, '_goo-active' );
+			candyjar.api.classify( this.upload_form, '_goo-inactive' );
+			
+			fHeight = 0;
+			this.animate( fHeight );			
+			// console.log( '1' );
+		}
+		else{
+			candyjar.api.classify( this.upload_form, '_goo-active' );
+			candyjar.api.declassify( this.upload_form, '_goo-inactive' );
+			// console.log( '2' );
+			
+			fHeight = 100;
+			this.animate( fHeight );
+			
+		}	
+		
+		
+		// console.log( this.upload_form );
+		
+	},
+	
+	animate : function( fHeight ){
+		var thingies = document.getElementsByClassName( 'arrow-thing' );
+		_animate = function(){
+			if( fHeight == 0 ){
+				_goo_variation_inst.upload_form.style.maxHeight = "0px";
+				
+				for( var i=0, n=thingies.length; i<n; i++ ){
+					thingies[i].style.opacity = 0;
+				}
+				//this.requestAnimationFrame( _animate );
+			}
+			else if( fHeight == 100 ){
+				_goo_variation_inst.upload_form.style.maxHeight = "500px";
+				for( var i=0, n=thingies.length; i<n; i++ ){
+					thingies[i].style.opacity = 1;
+				}
+				//this.requestAnimationFrame( _animate );
+			}
+		}
+		
+		_animate( fHeight );
+	}
+}
+
+_goo_variation_inst.init();
+
+/*
+	jQuery.ajax( '/wp-content/themes/project-resonate/woocommerce/transloadit-form.js', {
+		dataType: "script",
+		success : function( response ){
+			console.log( response );
+		},
+		error : function(){
+			console.log( 'fucked up' );
+			
+		}
+	});	
+*/
+
+jQuery(function(){
+	jQuery('#transloadit-form').transloadit({
+		wait : true,
+		triggerUploadOnFileSelection : true,
+		params : {
+			auth : {
+				key: "b15a103003e211e5a7cb1199b0923661"
+			},
+			steps : {
+				mp3: {
+					use: ":original",
+					robot: "/audio/encode",
+					preset: "mp3"
+				},
+				waveform : {
+					robot : "/audio/waveform",
+					use : "mp3",
+					width : 500,
+					height : 200,
+					background_color : "000000",
+					outer_color : "cccccc",
+					center_color : "ffffff"
+				}
+			},
+			notify_url : window.location.href
+		},
+		autoSubmit : false,
+		onUpload : function( upload ){
+			// console.log( upload );
+			
+			var woocomm = document.getElementsByClassName( 'variations_form cart' );
+			if( woocomm.length > 0 ){
+				
+				woocomm = woocomm[0];
+				
+				if( document.getElementsByName( 'transloadit-file' ).length < 1 ){
+					var transField = document.createElement( 'input' );
+					transField.type = 'hidden';
+					transField.name = 'transloadit-file';
+					woocomm.appendChild( transField );
+				}
+				else{
+					var transField = document.getElementsByName( 'transloadit-file' )[0];
+				}
+				
+				transField.value = upload.url;
+				console.log( transField.value );
+				
+				if( document.getElementsByName( 'transloadit-name' ).length < 1 ){
+					var transName = document.createElement( 'input' );
+					transName.type = 'hidden';
+					transName.name = 'transloadit-name';
+					woocomm.appendChild( transName );
+				}
+				else{
+					var transName = document.getElementsByName( 'transloadit-name' )[0];
+				}
+				
+				transName.value = upload.name;
+				console.log( upload.name );
+				
+			}
+		},
+		onResult : function( step, result ){
+			// console.log( step );
+			// console.log( result );
+			
+			var woocomm = document.getElementsByClassName( 'variations_form cart' );
+			if( woocomm.length > 0 ){
+				
+				woocomm = woocomm[0];
+				
+				var transField = document.createElement( 'input' );
+				transField.type = 'hidden';
+				transField.name = 'transloadit-png';
+				transField.value = result.url;
+				transField.setAttribute( 'required', 'true' );
+				woocomm.appendChild( transField );
+				
+				var bizzuton = document.getElementById( 'pres-upload-button-inst1' );
+				
+				if( document.getElementsByClassName( '_goo-uploaded-image-render' ).length < 1 ){
+					var sound_wave = document.createElement( 'img' );
+					sound_wave.className = "_goo-uploaded-image-render";
+					bizzuton.appendChild( sound_wave );
+				}
+				else{
+					var sound_wave = document.getElementsByClassName( '_goo-uploaded-image-render' )[0];
+				}
+			
+				sound_wave.src = result.url;
+				
+				var good_notice = document.createElement( 'p' );
+				good_notice.innerHTML = "File Processed Succesfully";
+				bizzuton.appendChild( good_notice );
+				
+			}						
+		},
+		onSuccess : function( assembly ){
+			// console.log( assembly.results );
+			// console.log( assembly );
+			
+			// document.getElementById('_goo-valid').parentNode.removeChild( document.getElementById('_goo-valid') );
+		}
+	});
+	// console.log( 'true' );
+});
+		
+</script>
+
+
+	
+
+<style>
+.variations input[name="attribute_bead-color"]
+{
+	margin:0;
+	padding:0;
+	-webkit-appearance:	none;
+	-moz-appearance:	input;
+	appearance:			none;
+	opacity: 0.4;
+	height: 24px;
+	width: 32px;
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-color: transparent !important;
+	
+	-webkit-transition: opacity 0.2s ease-in-out;
+	transition: opacity 0.2s ease-in-out;
+	
+	border: none !important;
+	border-width: 0 !important;
+}
+
+.variations input[name="attribute_bead-color"]:checked,
+.variations input[name="attribute_bead-color"]:hover
+{
+	opacity: 1;
+}
+
+.variations input[value='black-opaque']
+{
+	background-image:url( '/wp-content/themes/project-resonate/images/pr-blackbutton.png');	
+}
+
+.variations input[value='white-opaque']
+{
+	background-image:url( '/wp-content/themes/project-resonate/images/pr-whitebutton.png');	
+}
+
+.variations input[value='orange-opaque']
+{
+	background-image:url( '/wp-content/themes/project-resonate/images/pr-orangeObutton.png');	
+}
+
+.variations input[value='pink-translucent']
+{
+	background-image:url( '/wp-content/themes/project-resonate/images/pr-pinkbutton.png');	
+}
+
+.variations input[value='green-translucent']
+{
+	background-image:url( '/wp-content/themes/project-resonate/images/pr-greenbutton.png');	
+}
+
+.variations input[value='blue-translucent']
+{
+	background-image:url( '/wp-content/themes/project-resonate/images/pr-bluebutton.png');	
+}
+
+._goo-uploaded-image-render
+{
+	max-width: 350px;
+	width: 100%;
+	border: 1px solid rgb( 180, 180, 180 );
+	background-color: rgb( 255,255,255 );
+	margin-top: 30px;
+}
+
+.single-product-summary .variations_form.cart .pres-upload-button
+{
+	padding: 20px 0;
+	border-top: 1px solid rgb( 230, 230, 230 );
+	border-bottom: 1px solid rgb( 230, 230, 230 );
+}
+</style>
+<?php	
 }
 
 ?>

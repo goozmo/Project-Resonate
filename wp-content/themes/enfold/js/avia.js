@@ -1,3 +1,6 @@
+// Goozmo Edited this
+var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+
 (function($)
 {	
     "use strict";
@@ -1586,7 +1589,8 @@
             if(!transparent && !shrinking && !unsticktop.length) return;
             
 			win.on( 'debouncedresize',  function(){ el_height = $(elements).attr('style',"").filter(':first').height(); set_height(); } );
-            win.on( 'scroll',  function(){ window.requestAnimationFrame( set_height )} );
+			// Goozmo Edited This Too!
+            win.on( 'scroll',  function(){ requestAnimationFrame( set_height )} );
             set_height();
     }
 

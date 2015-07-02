@@ -111,6 +111,7 @@ if($headerS['header_topbar'] == true)
 						?>
 						
 						<div class="shopping-cart-bag">	
+							
 							<span class="css-cart-strap cart_dropdown_first"></span>
 							<a class="cart-contents style-text cart_dropdown_link" href="<?php echo WC()->cart->get_cart_url(); ?>" title="View your shopping cart"><div class="mini-cart-text"><?php echo WC()->cart->cart_contents_count; ?></div></a>
 						</div>
@@ -126,7 +127,7 @@ if($headerS['header_topbar'] == true)
 
 						    echo $extraClose;
 						
-						    echo "<nav class='_goo-main_menu' data-selectname='".__('Select a page','avia_framework')."' ".avia_markup_helper(array('context' => 'nav', 'echo' => false)).">";
+						    echo "<nav class='main_menu' data-selectname='".__('Select a page','avia_framework')."' ".avia_markup_helper(array('context' => 'nav', 'echo' => false)).">";
 						        $avia_theme_location = 'avia';
 						        $avia_menu_class = $avia_theme_location . '-menu';
 						        $args = array(
@@ -141,7 +142,6 @@ if($headerS['header_topbar'] == true)
 						        wp_nav_menu($args);
 						        
 								// if($icon_beside) echo $icons;
-						      
 						    /*
 						    * Hook that can be used for plugins and theme extensions
 						    */

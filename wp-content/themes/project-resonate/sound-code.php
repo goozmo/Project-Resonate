@@ -45,12 +45,22 @@ global $avia_config;
 						if( isset( $_POST['pres-soundcode'] ) || isset( $_GET['pres-soundcode'] ) ){
 							// print_r( $_POST['pres-soundcode'] );
 							
-							$_sound_code_ = $_POST['pres-soundcode'] || $_GET['pres-soundcode'];
+							if( isset( $_POST['pres-soundcode'] ) ){
+								$_sound_code_ = $_POST['pres-soundcode'];
+							}
+							elseif( isset( $_GET['pres-soundcode'] ) ){
+								$_sound_code_ = $_GET['pres-soundcode'];
+							}
+							
 							$_img_file_ = NULL;
 							$_aud_file_ = NULL;
 							
+							echo $_sound_code_;
+							
 							if( file_exists( $_SERVER['DOCUMENT_ROOT'].'/wp-content/uploads/pres/' ) && is_dir( $_SERVER['DOCUMENT_ROOT'].'/wp-content/uploads/pres/' ) ){
 								$dir_contents = scandir( $_SERVER['DOCUMENT_ROOT'].'/wp-content/uploads/pres/' );
+								
+								// echo count( $dir_contents );
 								
 								foreach( $dir_contents as $_file_ ){
 									

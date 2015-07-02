@@ -47,6 +47,16 @@ global $post, $woocommerce, $product;
 			width: 100%;
 		}
 
+@media screen and ( max-width: 450px ){
+	
+	._goo-images #_goo-imageThing img
+	{
+		height: 250px;
+		width: 100%;
+	}
+	
+}
+
 </style>
 
 

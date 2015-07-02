@@ -2793,7 +2793,7 @@ $.fn.avia_sc_tabs= function(options)
 				send.button.addClass('av-sending-button');
 				send.button.val(send.button.data('sending-label'));
 				
-				var redirect_to = form.data('avia-redirect') || false,
+				var redirect_to = form.data('avia-redirect') || false,
 					action		= form.attr('action');
 				
 				responseContainer.load(action+' '+options.responseContainer, send.dataObj, function()
