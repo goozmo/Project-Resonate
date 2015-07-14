@@ -421,6 +421,19 @@ function get_cart_items_from_session( $item, $values, $key ) {
 
 
 
+
+
+
+
+add_action( 'woocommerce_before_add_to_cart_form', 'do_step1');
+function do_step1(){
+	?>
+	<h4 class="_goo-order-step"><span>Step 1: </span>Choose your product variations: band and bead color.</h4>
+	<?php
+}
+
+
+
 add_action( 'woocommerce_add_to_cart_validation', 'goo_validate', 1, 5 );
 function goo_validate(){
 	
@@ -442,10 +455,13 @@ function goo_price_output(){
 	
 	?>
 	<div class="pres-upload-button" id="pres-upload-button-inst1">
+		<h4 class="_goo-order-step"><span>Step 2: </span>Upload a sound file. Click "Choose File," select your file and click "Submit." Visit our Create a Sound File page if you need additional tips.</h4>
 		<button class="button">Upload a sound file</button>
-		<span class="arrow-thing fa fa-angle-down">&nbsp;Upload an audio or video file in the form below</span>
+		<span class="arrow-thing fa fa-angle-down">&nbsp;Upload an audio or video file in the <a href="#transloadit-form" style="color: rgb( 239, 118, 34 );">form below</a></span>
 		<div style="width: 100%; clear: both;"></div>
 	</div>
+	<br/>
+	<h4 class="_goo-order-step"><span>Step 3: </span>After the file has been successfully processed, add the item to your cart and checkout.</h4>
 	
 	<div class="_goo-cart-price-output">
 		<?php echo $product->get_price_html(); ?>
@@ -453,11 +469,20 @@ function goo_price_output(){
 	<?php
 }
 
+
+add_action( 'woocommerce_after_add_to_cart_button', 'do_step4' );
+function do_step4(){
+	?>
+	<h4 class="_goo-order-step"><span>Step 4: </span>Check out & take your Sound Code to our Sound Code Page to listen. Your order will be filled with a product, padded box, plus a card with your sound code.</h4>
+	<?php
+}
+
 add_action( 'woocommerce_after_add_to_cart_form', 'goo_form_output' );
 function goo_form_output(){
 ?>
+
 <script src="//assets.transloadit.com/js/jquery.transloadit2-v2-latest.js"></script>
-<form id="transloadit-form" name="sally-struthers" enctype="multipart/form-data" method="post">
+<form id="transloadit-form" name="transloadit-form" enctype="multipart/form-data" method="post">
 	<div class="transloadit-form-container">
 		
 		<h5>To Upload a file, click "choose file" on the form below, select a file &amp; click open or enter.  For more detailed info on creating an accepted sound file, visit our <a href="/q-a">Q & A page</a></h5><br/>

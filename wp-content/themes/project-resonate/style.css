@@ -371,6 +371,7 @@ a.cart-contents.style-text .mini-cart-text {
 
 
 @media screen and ( min-width: 767px ){
+/*
 	.home #main #av-layout-grid-1 .av_one_fourth:first-of-type
 	{
 		border-right: 2px solid white;	
@@ -387,6 +388,12 @@ a.cart-contents.style-text .mini-cart-text {
 	{
 		border-left: 2px solid white;	
 	}
+*/
+}
+
+.home #av-layout-grid-1
+{
+	margin-top: 20px;
 }
 
 @media screen and ( max-width: 768px ){
@@ -441,7 +448,7 @@ span.sku_wrapper
 
 ._goo-cart-price-output
 {
-	padding: 40px 0 0;
+	padding: 20px 0 0;
 }
 
 ._goo-cart-price-output span.amount
@@ -519,4 +526,18 @@ tr.order_item .variation .variation-sound-file
 .social li a._goo-login-button
 {
 	font-size: 0.6em; 
+}
+
+
+
+._goo-order-step
+{
+	margin-bottom: 15px;
+	line-height: 1.5em;
+}
+
+._goo-order-step span
+{
+	color: rgb( 239, 118, 34 );
+	font-weight: bold;
 }
