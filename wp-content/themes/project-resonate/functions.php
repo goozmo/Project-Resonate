@@ -191,7 +191,90 @@ add_shortcode( '_goo_login_button', '_goo_login_button' );
 
 
 
+function soundcode_form(){
+	
+	$output = "";
+		
+		$output.="<div class='_goo-soundcodeform'>";
+		$output.= "<h3 class='av-special-heading-tag'>Have A Soundcode? Enter it Here!</h3>";
+		$output.= "<form name='pres-soundcode-form' id='pres-soundcode-form' class='pres-soundcode-forminst1' method='post'>";
+		$output.= "<input type='text' name='pres-soundcode' id='pres-soundcode' value='' />";
+		$output.= "<input type='submit' name='pres-soundcode-submit' value='Hear It!' />";
+		$output.= "</form>";
+						
+						if( isset( $_POST['pres-soundcode'] ) || isset( $_GET['pres-soundcode'] ) ){
+							// print_r( $_POST['pres-soundcode'] );
+							
+							if( isset( $_POST['pres-soundcode'] ) ){
+								$_sound_code_ = $_POST['pres-soundcode'];
+							}
+							elseif( isset( $_GET['pres-soundcode'] ) ){
+								$_sound_code_ = $_GET['pres-soundcode'];
+							}
+							
+							$_img_file_ = NULL;
+							$_aud_file_ = NULL;
+							
+							$output.= $_sound_code_;
+							
+							if( file_exists( $_SERVER['DOCUMENT_ROOT'].'/wp-content/uploads/pres/' ) && is_dir( $_SERVER['DOCUMENT_ROOT'].'/wp-content/uploads/pres/' ) ){
+								$dir_contents = scandir( $_SERVER['DOCUMENT_ROOT'].'/wp-content/uploads/pres/' );
+								
+								// echo count( $dir_contents );
+								
+								foreach( $dir_contents as $_file_ ){
+									
+									if( preg_match( "/^$_sound_code_.png/i", $_file_) ){
+										// echo "bingo";
+										$_img_file_ = $_file_;
+									}
+									
+									if( preg_match( "/^$_sound_code_.(wav|mp4|mov|m4v)/i", $_file_ ) ){
+										// echo "bongo";
+										$_aud_file_ = $_file_;
+									}
+									
+								}
+								
+								// echo "<pre>";
+								// print_r( $dir_contents );
+								// echo "</pre>";
+								
+							}
+							
+							if( $_img_file_ ) :
+							
+							$output.= "<div class='_goo-transoadit-photo'>";
+							$output.= "<img src='/wp-content/uploads/pres/$_img_file_'/>";
+							$output.= "</div><br/>";
+							endif;
+							
+							if( $_aud_file_ ) :
+							
+							$output.= "<audio controls class='_goo-transloadit-audio'>";
 
+							$_aud_type_ = 'wav';
+							if( preg_match('/^.*\.(wav)$/i', $_aud_file_) ){
+								$_aud_type_ = 'wav';
+							}
+									
+							
+							$output.= "<source src='/wp-content/uploads/pres/$_aud_file_' type='audio/$_aud_type_' />";
+							$output.= "</audio>";
+							endif;						
+
+							if( !$_aud_file_ && !$_img_file_ ){
+							
+							$output.= "<h4>We could not find a file associated with that code. Double check your code and try again. If problems persist, please contact us for help at <a href='mailto:support@projectresonate.com'>support@projectresonate.com</a></h4>";
+								
+							}
+						}
+						
+				$output.=  "</div>";
+				return $output;
+	
+}
+add_shortcode( 'soundcode_form', 'soundcode_form' );
 
 
 
@@ -428,6 +511,7 @@ function get_cart_items_from_session( $item, $values, $key ) {
 add_action( 'woocommerce_before_add_to_cart_form', 'do_step1');
 function do_step1(){
 	?>
+	<br/>
 	<h4 class="_goo-order-step"><span>Step 1: </span>Choose your product variations: band and bead color.</h4>
 	<?php
 }
@@ -440,7 +524,7 @@ function goo_validate(){
 	if( !isset( $_POST['transloadit-file'] ) || empty( $_POST['transloadit-file'] ) ){
 		$product = get_product( $product_id );
 		$product_title = $product->post->post_title;
-		wc_add_notice( "You need to upload a file... or else!" );
+		wc_add_notice( "You need to upload a file" );
 	}
 	else{
 		return true;
@@ -455,9 +539,9 @@ function goo_price_output(){
 	
 	?>
 	<div class="pres-upload-button" id="pres-upload-button-inst1">
-		<h4 class="_goo-order-step"><span>Step 2: </span>Upload a sound file. Click "Choose File," select your file and click "Submit." Visit our Create a Sound File page if you need additional tips.</h4>
+		<h4 class="_goo-order-step"><span>Step 2: </span>Upload a sound file. Click "Choose File," select your file and click "Submit." Visit our <a href="<?php echo get_post_permalink( 199, true ); ?>" style="color: rgb( 239, 118, 34 );">Create a Sound File page</a> if you need additional tips.</h4>
 		<button class="button">Upload a sound file</button>
-		<span class="arrow-thing fa fa-angle-down">&nbsp;Upload an audio or video file in the <a href="#transloadit-form" style="color: rgb( 239, 118, 34 );">form below</a></span>
+		<span class="arrow-thing fa fa-angle-down">&nbsp;Upload an audio or video file in the <a href="#transloadit-form" style="color: rgb( 239, 118, 34 );">form below.</a></span>
 		<div style="width: 100%; clear: both;"></div>
 	</div>
 	<br/>
@@ -470,7 +554,7 @@ function goo_price_output(){
 }
 
 
-add_action( 'woocommerce_after_add_to_cart_button', 'do_step4' );
+// add_action( 'woocommerce_after_add_to_cart_button', 'do_step4' );
 function do_step4(){
 	?>
 	<h4 class="_goo-order-step"><span>Step 4: </span>Check out & take your Sound Code to our Sound Code Page to listen. Your order will be filled with a product, padded box, plus a card with your sound code.</h4>
@@ -615,11 +699,10 @@ jQuery(function(){
 				waveform : {
 					robot : "/audio/waveform",
 					use : "mp3",
-					width : 500,
-					height : 200,
+					width : 1500,
+					height : 600,
 					background_color : "000000",
-					outer_color : "cccccc",
-					center_color : "ffffff"
+					background : "000000"
 				}
 			},
 			notify_url : window.location.href
@@ -781,8 +864,8 @@ jQuery(function(){
 .single-product-summary .variations_form.cart .pres-upload-button
 {
 	padding: 20px 0;
-	border-top: 1px solid rgb( 230, 230, 230 );
-	border-bottom: 1px solid rgb( 230, 230, 230 );
+	border-top: 	1px solid rgb( 180, 180, 180 );
+	border-bottom: 	1px solid rgb( 180, 180, 180 );
 }
 </style>
 <?php	

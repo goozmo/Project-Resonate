@@ -370,8 +370,8 @@ a.cart-contents.style-text .mini-cart-text {
 
 .pres-upload-button span.arrow-thing
 {
-	line-height: 40px;
-	padding: 0px 20px;
+	line-height: 24px;
+	padding: 10px 20px;
 }
 
 
@@ -399,7 +399,7 @@ a.cart-contents.style-text .mini-cart-text {
 
 .home #av-layout-grid-1
 {
-	margin-top: 20px;
+	margin-top: 140px;
 }
 
 @media screen and ( max-width: 768px ){
@@ -587,4 +587,53 @@ tr.order_item .variation .variation-sound-file
 	background-color: rgb( 239, 118, 34 );
 	border: 1px solid rgb( 239, 118, 34 );
 	color: rgb( 255,255,255 );
+}
+
+
+@media screen and ( max-width: 1080px ){
+	
+	.av-main-nav > li > a
+	{
+		font-size: 0.8em;
+	}
+	
+}
+
+#top .inner_product_header
+{
+	text-align: center;
+}
+
+#top .inner_product_header h3
+{
+	font-size: 1.6em;
+}
+
+.product-sorting,
+.woocommerce-tabs
+{
+	display: none;
+}
+
+._goo-soundcodeform h3.av-special-heading-tag
+{
+	margin-bottom: 10px;
+	color: rgb( 255,255,255 );
+	text-align: center;
+	font-weight: 300;
+	font-size: 2em;
+	margin-top: 20px;
+}
+
+._goo-soundcodeform #pres-soundcode-form input#pres-soundcode
+{
+	width: 40%;
+	margin: 0 auto;
+}
+
+._goo-soundcodeform #pres-soundcode-form input[type=submit]
+{
+	margin: 0 auto;
+	display: block;
+	margin-top: 20px;
 }
