@@ -371,7 +371,6 @@ class WC_Meta_Box_Order_Data {
 							}
 
 							echo '</div>';
-
 							do_action( 'woocommerce_admin_order_data_after_shipping_address', $order );
 						?>
 					</div>

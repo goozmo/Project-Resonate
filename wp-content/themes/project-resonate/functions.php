@@ -495,10 +495,32 @@ function get_cart_items_from_session( $item, $values, $key ) {
 	return $item;
 }
 
+add_action( 'woocommerce_after_order_itemmeta', 'goo_extra_line_items', 10, 3 );
+function goo_extra_line_items( $item_id, $item, $product ){
 
+	echo "<img src='" . $item['item_meta']['waveform-image'][0] ."' />";
+	
+}
 
-
-
+add_action( 'wcdn_order_item_before', '_goo_extra_delivery_note_item', 10, 2 );
+function _goo_extra_delivery_note_item( $product, $order ){
+	
+	// $post_id = $order->id;
+	// echo $post_id;
+	
+	// global $wpdb;
+	// $results = $wpdb->get_results( "SELECT order_item_id FROM pres_woocommerce_order_items WHERE order_id = $post_id", OBJECT );
+	// echo "<pre>";
+	// print_r( $results );
+	// echo "</pre>";
+	
+	// echo "<pre>";
+	// print_r( $product );
+	// echo "</pre>";
+	// echo "<pre>";
+	// print_r( $order );
+	// echo "</pre>";
+}
 
 
 

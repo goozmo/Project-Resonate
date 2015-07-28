@@ -81,6 +81,9 @@ if ( !defined( 'ABSPATH' ) ) exit;
 									<?php
 										$product = apply_filters( 'wcdn_order_item_product', $order->get_product_from_item( $item ), $item );
 										$item_meta = new WC_Order_Item_Meta( $item['item_meta'], $product );
+										
+										
+										
 									?>
 									
 									<tr>
@@ -119,7 +122,11 @@ if ( !defined( 'ABSPATH' ) ) exit;
 										<td class="product-price">
 											<span><?php echo $order->get_formatted_line_subtotal( $item ); ?></span>
 										</td>
-									</tr>
+									</tr>								
+									
+									<img src="<?php echo $item_meta->meta['waveform-image'][0] ?>" />
+								
+									
 								<?php endforeach; ?>
 							<?php endif; ?>
 						</tbody>
@@ -135,6 +142,7 @@ if ( !defined( 'ABSPATH' ) ) exit;
 									</tr>
 								<?php endforeach; ?>
 							<?php endif; ?>
+							
 						</tfoot>
 					</table>
 										
