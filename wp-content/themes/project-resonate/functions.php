@@ -317,6 +317,7 @@ function woo_after_processed( $order ){
 	unset( $woocommerce->session->data['transloadit-data'] );
 	unset( $woocommerce->session->data['transloadit-file'] );
 	unset( $woocommerce->session->data['transloadit-name'] );
+	unset( $woocommerce->session->data['transloadit-text'] );
 	
 	//echo "<script>console.log( 'woocommerce_order_details_after_customer_details' );</script>";
 }
@@ -341,10 +342,12 @@ function woo_hoo_stick_it_in_there( $item_id, $values ){
 	$cust_vals = $values['transloadit-data'];
 	$cust_vals2 = $values['transloadit-file'];
 	$cust_vals3 = $values['transloadit-name'];
+	$cust_vals4 = $values['transloadit-text'];
 	
 	wc_add_order_item_meta( $item_id, 'waveform-image', $cust_vals );
 	wc_add_order_item_meta( $item_id, 'sound-file', $cust_vals2 );
 	wc_add_order_item_meta( $item_id, 'your-sound-code', $cust_vals3 );
+	wc_add_order_item_meta( $item_id, 'transcription', $cust_vals4 );
 	
 	// echo "<pre>";
 	// print_r( $values );
@@ -447,17 +450,20 @@ function add_cart_item_custom_data_vase( $cart_item_meta, $product_id, $variatio
 			"file" => $filepath2,
 			"display" => "Toots McScoots",
 			"errors" => $errors,
-			"fileName" => $sound_code
+			"fileName" => $sound_code,
+			'text' => $_POST['transloadit-text']
 		),
 	);
 	
 	$cart_item_meta["transloadit-name"] = $sound_code;
 	$cart_item_meta["transloadit-data"] = $transloadit[0]['value'];
 	$cart_item_meta["transloadit-file"] = $transloadit[0]['file'];
+	$cart_item_meta["transloadit-text"] = $transloadit[0]['text'];
 	
 	WC()->session->set( "transloadit-name", $sound_code );	
 	WC()->session->set( "transloadit-data", $transloadit[0]['value'] );
 	WC()->session->set( "transloadit-file", $transloadit[0]['file'] );
+	WC()->session->set( "transloadit-text", $transloadit[0]['text'] );
 	
 	return $cart_item_meta;
 	
@@ -490,6 +496,10 @@ function get_cart_items_from_session( $item, $values, $key ) {
 		$item[ 'transloadit-file' ] = $values['transloadit-file'];
 	}
 	
+	if ( array_key_exists( 'transloadit-text', $values ) ){
+		$item[ 'transloadit-text' ] = $values['transloadit-text'];
+	}
+	
 	// echo "<script>console.log( 'woocommerce_get_cart_item_from_session' );</script>";
 	
 	return $item;
@@ -498,7 +508,7 @@ function get_cart_items_from_session( $item, $values, $key ) {
 add_action( 'woocommerce_after_order_itemmeta', 'goo_extra_line_items', 10, 3 );
 function goo_extra_line_items( $item_id, $item, $product ){
 
-	echo "<img src='" . $item['item_meta']['waveform-image'][0] ."' />";
+	// echo "<img src='" . $item['item_meta']['waveform-image'][0] ."' />";
 	
 }
 
@@ -594,12 +604,39 @@ function goo_form_output(){
 		<h5>To Upload a file, click "choose file" on the form below, select a file &amp; click open or enter.  For more detailed info on creating an accepted sound file, visit our <a href="/q-a">Q & A page</a></h5><br/>
 		<h5>Accepted file types .wav, .ogg, .m4v or .mov file</h5>
 		<br/>
+		<label for="transloadit-text" >A text transcript of your audio file</label>
+		<textarea name="transloadit-text" id="transloadit-text" required="true" pattern="^(/w{1,256})$"></textarea>
 		<input type="file" name="transloadit" required="true" pattern="(.wav|.ogg|.m4p|.mov)$"/>
-		<input type="submit" />
 		<div style="width: 100%; clear: both;"></div>
 	</div>
 	
 </form>
+
+<script>
+
+var _transRun = function(){
+	var transTextField = document.getElementById('transloadit-text');
+	
+	var transLoaditField = document.getElementsByName( 'transloadit' );
+	for( var i=0, n=transLoaditField.length; i<n; i++ ){
+		if( transLoaditField[i].type == 'file' && transTextField.value == '' ){
+			transLoaditField[i].setAttribute('disabled', 'true');
+		}
+		else{
+			if( transLoaditField[i].getAttribute('disabled') ){
+				transLoaditField[i].removeAttribute('disabled');
+			}
+		}
+	}
+}
+candyjar.api.evLoad(
+	function(){
+		_transRun();
+		document.getElementById('transloadit-form').addEventListener('change', _transRun );
+	}
+);	
+</script>
+
 <script>
 //console.log( '<?php echo $audioFile; ?>' );
 
@@ -782,6 +819,13 @@ jQuery(function(){
 				transField.setAttribute( 'required', 'true' );
 				woocomm.appendChild( transField );
 				
+				var transText = document.createElement( 'input' );
+				transText.type = 'hidden';
+				transField.name = 'transloadit-text';
+				transField.value = document.getElementById('transloadit-text').value;
+				transText.setAttribute('required', 'true');
+				woocomm.appendChild(transText);
+				
 				var bizzuton = document.getElementById( 'pres-upload-button-inst1' );
 				
 				if( document.getElementsByClassName( '_goo-uploaded-image-render' ).length < 1 ){
@@ -939,26 +983,26 @@ if( document.getElementsByClassName('single-product').length > 0 ){
 			"silver-chain-blue-translucent" 		: "/wp-content/uploads/2015/06/chainblue-450x300.png",
 		},
 		necklaceImg : {
-			"black-rubber-orange-opaque" 			: "/wp-content/uploads/2015/06/BlackOrange-450x350.png",
-			"black-rubber-black-opaque" 			: "/wp-content/uploads/2015/06/blackblack-450x300.png",
-			"black-rubber-white-opaque" 			: "/wp-content/uploads/2015/06/blackwhite-450x300.png",
-			"black-rubber-pink-translucent" 		: "/wp-content/uploads/2015/06/blackpink-450x300.png",
-			"black-rubber-green-translucent" 		: "/wp-content/uploads/2015/06/blackgreen-450x300.png",
-			"black-rubber-blue-translucent" 		: "/wp-content/uploads/2015/06/Blackblue-450x300.png",
+			"black-rubber-orange-opaque" 			: "/wp-content/uploads/WhiteWhite-495x400.png",
+			"black-rubber-black-opaque" 			: "/wp-content/uploads/WhiteWhite-495x400.png",
+			"black-rubber-white-opaque" 			: "/wp-content/uploads/WhiteWhite-495x400.png",
+			"black-rubber-pink-translucent" 		: "/wp-content/uploads/WhiteWhite-495x400.png",
+			"black-rubber-green-translucent" 		: "/wp-content/uploads/WhiteWhite-495x400.png",
+			"black-rubber-blue-translucent" 		: "/wp-content/uploads/WhiteWhite-495x400.png",
+													   
+			"white-rubber-orange-opaque" 			: "/wp-content/uploads/WhiteWhite-495X400.png",
+			"white-rubber-black-opaque" 			: "/wp-content/uploads/WhiteWhite-495x400.png",
+			"white-rubber-white-opaque" 			: "/wp-content/uploads/WhiteWhite-495x400.png",
+			"white-rubber-pink-translucent" 		: "/wp-content/uploads/WhiteWhite-495x400.png",
+			"white-rubber-green-translucent" 		: "/wp-content/uploads/WhiteWhite-495x400.png",
+			"white-rubber-blue-translucent" 		: "/wp-content/uploads/WhiteWhite-495x400.png",
 			
-			"white-rubber-orange-opaque" 			: "/wp-content/uploads/2015/06/whiteorange-450x300.png",
-			"white-rubber-black-opaque" 			: "/wp-content/uploads/blackbracelet-450x350.png",
-			"white-rubber-white-opaque" 			: "/wp-content/uploads/2015/06/whitewhite-450x344.png",
-			"white-rubber-pink-translucent" 		: "/wp-content/uploads/2015/06/whitepink-450x300.png",
-			"white-rubber-green-translucent" 		: "/wp-content/uploads/2015/06/whitegreen-450x300.png",
-			"white-rubber-blue-translucent" 		: "/wp-content/uploads/2015/06/whiteblue-450x300.png",
-			
-			"silver-chain-orange-opaque" 			: "/wp-content/uploads/2015/06/chainorange-450x300.png",
-			"silver-chain-black-opaque" 			: "/wp-content/uploads/2015/06/chainblack-450x300.png",
-			"silver-chain-white-opaque" 			: "/wp-content/uploads/2015/06/chainwhite-450x300.png",
-			"silver-chain-pink-translucent" 		: "/wp-content/uploads/2015/06/chainpink-450x330.png",
-			"silver-chain-green-translucent" 		: "/wp-content/uploads/2015/06/chaingreen-450x300.png",
-			"silver-chain-blue-translucent" 		: "/wp-content/uploads/2015/06/chainblue-450x300.png",
+			"silver-chain-orange-opaque" 			: "/wp-content/uploads/WhiteWhite-495x400.png",
+			"silver-chain-black-opaque" 			: "/wp-content/uploads/WhiteWhite-495x400.png",
+			"silver-chain-white-opaque" 			: "/wp-content/uploads/WhiteWhite-495x400.png",
+			"silver-chain-pink-translucent" 		: "/wp-content/uploads/WhiteWhite-495x400.png",
+			"silver-chain-green-translucent" 		: "/wp-content/uploads/WhiteWhite-495x400.png",
+			"silver-chain-blue-translucent" 		: "/wp-content/uploads/WhiteWhite-495x400.png",
 		},
 		shirtImg : {
 			"blackorange" 							: "/wp-content/uploads/blackorange.jpg",
@@ -994,11 +1038,15 @@ if( document.getElementsByClassName('single-product').length > 0 ){
 					break;
 				case 20 : 
 					this.imgSet = this.necklaceImg;
+					//console.log( 'init switch' );
+					//console.log( this.imgSet );
+					// console.log( '20' );
 					break;
 				case 271 : 
 					this.imgSet = this.shirtImg;
 					break;
 				default :
+					console.log( 'defualt' );
 					this.imgSet = this.braceletImg;
 			}
 			
@@ -1045,6 +1093,9 @@ if( document.getElementsByClassName('single-product').length > 0 ){
 			
 			// console.log( currentBand + " " + currentBead + " " + currentShirtColor + " " + currentShirtPrint );
 			
+			//console.log( 'getVals()' );
+			//console.log( this.imgSet );
+			
 			return {
 				'band' : currentBand,
 				'bead' : currentBead,
@@ -1056,6 +1107,7 @@ if( document.getElementsByClassName('single-product').length > 0 ){
 		getImage : function(){
 			
 			var vals = this.getVals();
+			// console.log( this.getVals() );
 			
 			// disable white on white
 			if( vals.shirtColor === 'white' || vals.shirtPrint === 'white' ){
@@ -1103,23 +1155,27 @@ if( document.getElementsByClassName('single-product').length > 0 ){
 			else if( vals.shirtColor && vals.shirtPrint ){
 				var val = vals.shirtColor + vals.shirtPrint;
 			}
+		
 			
-			// console.log( val );
-			
+			// console.log( this.imgSet[val] );
 			if( this.imgSet[val] ){
 				var updateIMG = this.imgSet[val];
-				// console.log( updateIMG );
+				// console.log( "123 " + updateIMG );
 			}
+			
+			
 			
 			if( updateIMG ){
 				// console.log( _cjTransitionProp );
+				
 				var _processing = false;
 				this.thisImg.style[_cjTransitionProp] = "opacity 0.2s ease-in-out";
-				if( this._preloaded ){
+				if( this._preloaded === true ){
 					if( _processing === false ){
 						this.thisImg.style.opacity = 0;
 						this.thisImg.addEventListener( _cjTransitionEndProp, function(){
-						
+							console.log( candyShopInst.thisProduct );
+							
 							candyShopInst.thisImg.src = updateIMG;
 							// console.log( document.getElementById( '_goo-imageThing-img' ).src );
 							//console.log( typeof shoeshiner );
@@ -1129,20 +1185,22 @@ if( document.getElementsByClassName('single-product').length > 0 ){
 							shoeshiner = setInterval(function(){
 								_processing = true;
 								if( document.getElementById( '_goo-imageThing-img' ).src == "http://resonate.lsp.goozmo.com" + updateIMG ){
+									console.log( updateIMG );
 									candyShopInst.thisImg.style.opacity = 1;
 									clearInterval( shoeshiner );
 									// console.log( 'got' );
 									_processing = false;
 								}
 							}, 200)
-							// console.log( 'monkey' );
+							 console.log( 'monkey' );
 						}, false );
 					}
 				}
 				else{
 					this.thisImg.src = updateIMG;
 					this._preloaded = true;
-					// console.log( 'poop' );
+					//console.log( updateIMG );
+					//console.log( 'poop' );
 				}
 			}
 			
@@ -1192,6 +1250,7 @@ if( document.getElementsByClassName('single-product').length > 0 ){
 <img src="/wp-content/uploads/whitepink.jpg" alt=""/>
 <img src="/wp-content/uploads/whitepurple.jpg" alt=""/>
 
+<img src="/wp-content/uploads/tshirtback.jpg" alt="" />
 
 </div>
 

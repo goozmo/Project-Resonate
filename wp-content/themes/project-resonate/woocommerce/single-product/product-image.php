@@ -25,4 +25,14 @@ global $post, $woocommerce, $product;
 
 </div>
 
-
+<?php
+	
+if( get_the_ID() === 271 ){
+	?>
+	<br/><br/>
+	<h5>Backside graphic</h5>
+	<img src="/wp-content/uploads/tshirtback.jpg" alt="back of shirt" />
+	<?php
+}
+	
+?>
