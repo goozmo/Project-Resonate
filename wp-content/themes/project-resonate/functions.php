@@ -346,11 +346,11 @@ function woo_hoo_stick_it_in_there( $item_id, $values ){
 	wc_add_order_item_meta( $item_id, 'sound-file', $cust_vals2 );
 	wc_add_order_item_meta( $item_id, 'your-sound-code', $cust_vals3 );
 	
-	echo "<pre>";
-	print_r( $values );
-	echo "</pre>";
+	// echo "<pre>";
+	// print_r( $values );
+	// echo "</pre>";
 	
-	echo "<script>console.log( 'woocommerce_add_order_item_meta' );</script>";
+	// echo "<script>console.log( 'woocommerce_add_order_item_meta' );</script>";
 }
 
 
@@ -362,7 +362,7 @@ function woo_hoo_stick_it_in_there( $item_id, $values ){
 	*
 	*
 */
-add_filter( 'woocommerce_add_cart_item_data', 'add_cart_item_custom_data_vase', 10, 2 );
+add_filter( 'woocommerce_add_cart_item_data', 'add_cart_item_custom_data_vase', 10, 3 );
 function add_cart_item_custom_data_vase( $cart_item_meta, $product_id, $variation_id ) {
 
 	global $woocommerce;
@@ -624,7 +624,7 @@ _goo_variation_inst = {
 		pre_class = this.upload_form.className;
 		this.upload_form.className = pre_class + " _goo-inactive"; 
 		
-		console.log( this.upload_form.style[ this._cjTransformProp ] );
+		// console.log( this.upload_form.style[ this._cjTransformProp ] );
 		
 		if( this.upload_form.style[ this._cjTransformProp ] === "" || this.upload_form.style[ this._cjTransformProp ] === "undefined" || this.upload_form.style[ this._cjTransformProp ] === null ){
 			this.upload_form.style[ this._cjTransitionProp ] = "max-height 0.2s ease-in-out";
@@ -749,7 +749,7 @@ jQuery(function(){
 				}
 				
 				transField.value = upload.url;
-				console.log( transField.value );
+				// console.log( transField.value );
 				
 				if( document.getElementsByName( 'transloadit-name' ).length < 1 ){
 					var transName = document.createElement( 'input' );
@@ -762,7 +762,7 @@ jQuery(function(){
 				}
 				
 				transName.value = upload.name;
-				console.log( upload.name );
+				// console.log( upload.name );
 				
 			}
 		},
@@ -890,6 +890,311 @@ jQuery(function(){
 	border-bottom: 	1px solid rgb( 180, 180, 180 );
 }
 </style>
+
+<!-- -->
+<script>
+if( document.getElementsByClassName('single-product').length > 0 ){
+	
+	var doppleganger = document.getElementsByClassName( 'variations' );
+	for( var i=0, n=doppleganger.length; i<n; i++ ){
+		doppleganger[i].addEventListener( 'change', function(){
+			candyShopInst.clickFunc();
+		});
+	}
+	
+	var _cjTransitionProp = candyjar.api.evCSSanimationProperty( [ 'transition', 'webkitTransition', 'otransition' ] ),
+	_cjTransitionEndProp = candyjar.api.evCSSanimationProperty( ['transitionend', 'webkitTransitionEnd', 'otransitionend', 'transitionend'] ),
+	_cjTransformProp = candyjar.api.evCSSanimationProperty( ['transform', 'msTransform', 'webkitTransform', 'mozTransform', 'oTranform'] ), 
+	requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+	
+	candyShopInst = {
+		
+		_preloaded : false,
+		thisProduct : <?php echo the_ID(); ?>,
+		thisImg : "",
+		thisBand : false,
+		thisBead : false,
+		thisShirtColor : false,
+		thisShirtPrint : false,
+		braceletImg : {
+			"black-rubber-orange-opaque" 			: "/wp-content/uploads/2015/06/BlackOrange-450x350.png",
+			"black-rubber-black-opaque" 			: "/wp-content/uploads/2015/06/blackblack-450x300.png",
+			"black-rubber-white-opaque" 			: "/wp-content/uploads/2015/06/blackwhite-450x300.png",
+			"black-rubber-pink-translucent" 		: "/wp-content/uploads/2015/06/blackpink-450x300.png",
+			"black-rubber-green-translucent" 		: "/wp-content/uploads/2015/06/blackgreen-450x300.png",
+			"black-rubber-blue-translucent" 		: "/wp-content/uploads/2015/06/Blackblue-450x300.png",
+			
+			"white-rubber-orange-opaque" 			: "/wp-content/uploads/2015/06/whiteorange-450x300.png",
+			"white-rubber-black-opaque" 			: "/wp-content/uploads/blackbracelet-450x350.png",
+			"white-rubber-white-opaque" 			: "/wp-content/uploads/2015/06/whitewhite-450x344.png",
+			"white-rubber-pink-translucent" 		: "/wp-content/uploads/2015/06/whitepink-450x300.png",
+			"white-rubber-green-translucent" 		: "/wp-content/uploads/2015/06/whitegreen-450x300.png",
+			"white-rubber-blue-translucent" 		: "/wp-content/uploads/2015/06/whiteblue-450x300.png",
+			
+			"silver-chain-orange-opaque" 			: "/wp-content/uploads/2015/06/chainorange-450x300.png",
+			"silver-chain-black-opaque" 			: "/wp-content/uploads/2015/06/chainblack-450x300.png",
+			"silver-chain-white-opaque" 			: "/wp-content/uploads/2015/06/chainwhite-450x300.png",
+			"silver-chain-pink-translucent" 		: "/wp-content/uploads/2015/06/chainpink-450x330.png",
+			"silver-chain-green-translucent" 		: "/wp-content/uploads/2015/06/chaingreen-450x300.png",
+			"silver-chain-blue-translucent" 		: "/wp-content/uploads/2015/06/chainblue-450x300.png",
+		},
+		necklaceImg : {
+			"black-rubber-orange-opaque" 			: "/wp-content/uploads/2015/06/BlackOrange-450x350.png",
+			"black-rubber-black-opaque" 			: "/wp-content/uploads/2015/06/blackblack-450x300.png",
+			"black-rubber-white-opaque" 			: "/wp-content/uploads/2015/06/blackwhite-450x300.png",
+			"black-rubber-pink-translucent" 		: "/wp-content/uploads/2015/06/blackpink-450x300.png",
+			"black-rubber-green-translucent" 		: "/wp-content/uploads/2015/06/blackgreen-450x300.png",
+			"black-rubber-blue-translucent" 		: "/wp-content/uploads/2015/06/Blackblue-450x300.png",
+			
+			"white-rubber-orange-opaque" 			: "/wp-content/uploads/2015/06/whiteorange-450x300.png",
+			"white-rubber-black-opaque" 			: "/wp-content/uploads/blackbracelet-450x350.png",
+			"white-rubber-white-opaque" 			: "/wp-content/uploads/2015/06/whitewhite-450x344.png",
+			"white-rubber-pink-translucent" 		: "/wp-content/uploads/2015/06/whitepink-450x300.png",
+			"white-rubber-green-translucent" 		: "/wp-content/uploads/2015/06/whitegreen-450x300.png",
+			"white-rubber-blue-translucent" 		: "/wp-content/uploads/2015/06/whiteblue-450x300.png",
+			
+			"silver-chain-orange-opaque" 			: "/wp-content/uploads/2015/06/chainorange-450x300.png",
+			"silver-chain-black-opaque" 			: "/wp-content/uploads/2015/06/chainblack-450x300.png",
+			"silver-chain-white-opaque" 			: "/wp-content/uploads/2015/06/chainwhite-450x300.png",
+			"silver-chain-pink-translucent" 		: "/wp-content/uploads/2015/06/chainpink-450x330.png",
+			"silver-chain-green-translucent" 		: "/wp-content/uploads/2015/06/chaingreen-450x300.png",
+			"silver-chain-blue-translucent" 		: "/wp-content/uploads/2015/06/chainblue-450x300.png",
+		},
+		shirtImg : {
+			"blackorange" 							: "/wp-content/uploads/blackorange.jpg",
+			"blackblack" 							: "/wp-content/uploads/blackblack.jpg",
+			"blackblue" 							: "/wp-content/uploads/blackblue.jpg",
+			"blackcamo" 							: "/wp-content/uploads/blackcamo.jpg",
+			"blackgreen" 							: "/wp-content/uploads/blackgreen.jpg",
+			"blackpink" 							: "/wp-content/uploads/blackpink.jpg",
+			"blackpurple"							: "/wp-content/uploads/blackpurple.jpg",
+			"blackwhite"							: "/wp-content/uploads/blackwhite.jpg",
+			"whiteblack"							: "/wp-content/uploads/whiteblack.jpg",
+			"whiteblue"								: "/wp-content/uploads/whiteblue.jpg",
+			"whitecamo"								: "/wp-content/uploads/whitecamo.jpg",
+			"whitegreen"							: "/wp-content/uploads/whitegreen.jpg",
+			"whiteorange"							: "/wp-content/uploads/whiteorange.jpg",
+			"whitepink"								: "/wp-content/uploads/whitepink.jpg",
+			"whitepurple"							: "/wp-content/uploads/whitepurple.jpg",
+		},
+		imgSet : {},
+		
+		init : function(){
+			this.thisImg = document.getElementById( '_goo-imageThing-img' );
+			this.thisBand = document.getElementsByName( 'attribute_band-color' );
+			this.thisBead = document.getElementsByName( 'attribute_bead-color' );
+			this.thisShirtColor = document.getElementsByName( 'attribute_shirt-color' );
+			this.thisShirtPrint = document.getElementsByName( 'attribute_print-color' );
+			
+			var img_preloader = document.createElement( 'img' );
+			
+			switch( this.thisProduct ){
+				case 17 : 
+					this.imgSet = this.braceletImg;
+					break;
+				case 20 : 
+					this.imgSet = this.necklaceImg;
+					break;
+				case 271 : 
+					this.imgSet = this.shirtImg;
+					break;
+				default :
+					this.imgSet = this.braceletImg;
+			}
+			
+			this.getImage();
+			
+			//console.log( this.thisBand.length + " " + this.thisBead );
+		},
+		
+		clickFunc : function(){
+			
+			this.getImage();
+	
+		},
+		
+		getVals : function(){
+			
+			// console.log( this.thisShirtColor.length );
+			var currentBand = false, currentBead = false, currentShirtColor = false, currentShirtPrint = false;
+			
+			for( var i=0, n=this.thisBand.length; i<n; i++ ){
+				if( this.thisBand[i].checked ){
+					var currentBand = this.thisBand[i].value;
+					break;
+				}
+			}
+			for( var i=0, n=this.thisBead.length; i<n; i++ ){
+				if( this.thisBead[i].checked ){
+					var currentBead = this.thisBead[i].value;
+					break;
+				}
+			}
+			for( var i=0, n=this.thisShirtColor.length; i<n; i++ ){
+				if( this.thisShirtColor[i].checked ){
+					var currentShirtColor = this.thisShirtColor[i].value;
+					break;
+				}
+			}
+			for( var i=0, n=this.thisShirtPrint.length; i<n; i++ ){
+				if( this.thisShirtPrint[i].checked ){
+					var currentShirtPrint = this.thisShirtPrint[i].value;
+					break;
+				}
+			}
+			
+			// console.log( currentBand + " " + currentBead + " " + currentShirtColor + " " + currentShirtPrint );
+			
+			return {
+				'band' : currentBand,
+				'bead' : currentBead,
+				'shirtColor' : currentShirtColor,
+				'shirtPrint' : currentShirtPrint
+			}	
+		},
+		
+		getImage : function(){
+			
+			var vals = this.getVals();
+			
+			// disable white on white
+			if( vals.shirtColor === 'white' || vals.shirtPrint === 'white' ){
+				colorInputs = document.getElementsByName( 'attribute_shirt-color' ),
+				printInputs = document.getElementsByName( 'attribute_print-color' );
+				
+				switch( vals.shirtColor ){
+					case 'white' : 
+						for( var i=0, n=printInputs.length; i<n; i++ ){
+							if( printInputs[i].value == 'white' ){
+								printInputs[i].setAttribute( 'disabled', 'true' );
+							}
+							else{
+								printInputs[i].removeAttribute( 'disabled' );
+							}
+						}
+						break;
+					default : 
+						for( var i=0, n=colorInputs.length; i<n; i++ ){
+							if( colorInputs[i].value == 'white' ){
+								colorInputs[i].setAttribute( 'disabled', 'true' );
+							}
+							else{
+								colorInputs[i].removeAttribute( 'disabled' );
+							}
+						}
+				}
+			}
+			else{
+				var _form = document.getElementsByClassName('variations_form cart');
+				for( var x=0, y=_form.length; x<y; x++ ){
+					var _inputs = _form[x].getElementsByTagName('input');
+					for( var i=0, n=_inputs.length; i<n; i++ ){
+						if( _inputs[i].getAttribute('disabled') == 'true' ){
+							_inputs[i].removeAttribute('disabled');
+						}
+					}
+				}
+				
+			}
+			
+			if( vals.band && vals.bead ){
+				var val = vals.band + "-" + vals.bead;
+			}
+			else if( vals.shirtColor && vals.shirtPrint ){
+				var val = vals.shirtColor + vals.shirtPrint;
+			}
+			
+			// console.log( val );
+			
+			if( this.imgSet[val] ){
+				var updateIMG = this.imgSet[val];
+				// console.log( updateIMG );
+			}
+			
+			if( updateIMG ){
+				// console.log( _cjTransitionProp );
+				var _processing = false;
+				this.thisImg.style[_cjTransitionProp] = "opacity 0.2s ease-in-out";
+				if( this._preloaded ){
+					if( _processing === false ){
+						this.thisImg.style.opacity = 0;
+						this.thisImg.addEventListener( _cjTransitionEndProp, function(){
+						
+							candyShopInst.thisImg.src = updateIMG;
+							// console.log( document.getElementById( '_goo-imageThing-img' ).src );
+							//console.log( typeof shoeshiner );
+							if( typeof shoeshiner !== 'undefined' ){
+								clearInterval( shoeshiner );
+							}
+							shoeshiner = setInterval(function(){
+								_processing = true;
+								if( document.getElementById( '_goo-imageThing-img' ).src == "http://resonate.lsp.goozmo.com" + updateIMG ){
+									candyShopInst.thisImg.style.opacity = 1;
+									clearInterval( shoeshiner );
+									// console.log( 'got' );
+									_processing = false;
+								}
+							}, 200)
+							// console.log( 'monkey' );
+						}, false );
+					}
+				}
+				else{
+					this.thisImg.src = updateIMG;
+					this._preloaded = true;
+					// console.log( 'poop' );
+				}
+			}
+			
+		}
+		
+	}
+	
+	candyShopInst.init();
+}
+</script>
+
+<div style="display:none !important">
+	
+<img src="/wp-content/uploads/2015/06/BlackOrange-450x350.png" alt=""/>
+<img src="/wp-content/uploads/2015/06/blackblack-450x300.png" alt=""/>
+<img src="/wp-content/uploads/2015/06/blackwhite-450x300.png" alt=""/>
+<img src="/wp-content/uploads/2015/06/blackpink-450x300.png" alt=""/>
+<img src="/wp-content/uploads/2015/06/blackgreen-450x300.png" alt=""/>
+<img src="/wp-content/uploads/2015/06/Blackblue-450x300.png" alt=""/>
+<img src="/wp-content/uploads/2015/06/whiteorange-450x300.png" alt=""/>
+<img src="/wp-content/uploads/blackbracelet-450x350.png" alt=""/>
+<img src="/wp-content/uploads/2015/06/whitewhite-450x344.png" alt=""/>
+<img src="/wp-content/uploads/2015/06/whitepink-450x300.png" alt=""/>
+<img src="/wp-content/uploads/2015/06/whitegreen-450x300.png" alt=""/>
+<img src="/wp-content/uploads/2015/06/whiteblue-450x300.png" alt=""/>
+<img src="/wp-content/uploads/2015/06/chainorange-450x300.png" alt=""/>
+<img src="/wp-content/uploads/2015/06/chainblack-450x300.png" alt=""/>
+<img src="/wp-content/uploads/2015/06/chainwhite-450x300.png" alt=""/>
+<img src="/wp-content/uploads/2015/06/chainpink-450x330.png" alt=""/>
+<img src="/wp-content/uploads/2015/06/chaingreen-450x300.png" alt=""/>
+<img src="/wp-content/uploads/2015/06/chainblue-450x300.png" alt=""/>
+
+
+<img src="/wp-content/uploads/blackorange.jpg" alt=""/>
+<img src="/wp-content/uploads/blackblack.jpg" alt=""/>
+<img src="/wp-content/uploads/blackblue.jpg" alt=""/>
+<img src="/wp-content/uploads/blackcamo.jpg" alt=""/>
+<img src="/wp-content/uploads/blackgreen.jpg" alt=""/>
+<img src="/wp-content/uploads/blackpink.jpg" alt=""/>
+<img src="/wp-content/uploads/blackpurple.jpg" alt=""/>
+<img src="/wp-content/uploads/blackwhite.jpg" alt=""/>
+<img src="/wp-content/uploads/whiteblack.jpg" alt=""/>
+<img src="/wp-content/uploads/whiteblue.jpg" alt=""/>
+<img src="/wp-content/uploads/whitecamo.jpg" alt=""/>
+<img src="/wp-content/uploads/whitegreen.jpg" alt=""/>
+<img src="/wp-content/uploads/whiteorange.jpg" alt=""/>
+<img src="/wp-content/uploads/whitepink.jpg" alt=""/>
+<img src="/wp-content/uploads/whitepurple.jpg" alt=""/>
+
+
+</div>
+
 <?php	
 }
 

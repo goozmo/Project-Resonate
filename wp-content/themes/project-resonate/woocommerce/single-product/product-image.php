@@ -26,37 +26,3 @@ global $post, $woocommerce, $product;
 </div>
 
 
-<style>
-._goo-images
-{
-	background-image: url( '/wp-content/themes/project-resonate/images/defaultImage.png' );
-	background-position: center center;
-	background-size: contain;
-}
-
-	._goo-images #_goo-imageThing
-	{
-		max-height: 300px;
-		max-width: 100%;
-		overflow: hidden;
-	}
-	
-		._goo-images #_goo-imageThing img
-		{
-			height: 300px;
-			width: 100%;
-		}
-
-@media screen and ( max-width: 450px ){
-	
-	._goo-images #_goo-imageThing img
-	{
-		height: 250px;
-		width: 100%;
-	}
-	
-}
-
-</style>
-
-
