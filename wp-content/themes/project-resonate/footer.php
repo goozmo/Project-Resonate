@@ -189,9 +189,10 @@
 /*
 global $woocommerce;
 echo "<pre>";
-// print_r( $woocommerce );
+print_r( $woocommerce );
 echo "</pre>";
 */
+
 
 
 	
