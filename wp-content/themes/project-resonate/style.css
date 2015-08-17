@@ -688,3 +688,21 @@ tr.order_item .variation .variation-sound-file
 	}
 	
 }
+
+
+p.ls-l
+{
+	color: rgb( 255,255,255 );
+	font-size: 2.5em;
+	line-height: 1.2em;
+	text-align: right;
+
+}
+	
+@media screen and ( max-width: 720px ){
+	p.ls-l
+	{
+		left: 20%;
+		width: 80%;	
+	}
+}
