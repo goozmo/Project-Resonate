@@ -215,7 +215,7 @@ function soundcode_form(){
 							$_img_file_ = NULL;
 							$_aud_file_ = NULL;
 							
-							$output.= $_sound_code_;
+							echo "<style>#av_section_1 .av-parallax{ background-image: none !important;} #av_section_1 .av-section-color-overlay{ background-color: white !important; opacity: 1 !important; } ._goo-soundcodeform h3.av-special-heading-tag{ color: rgb( 90,90,90 ); }</style>";
 							
 							if( file_exists( $_SERVER['DOCUMENT_ROOT'].'/wp-content/uploads/pres/' ) && is_dir( $_SERVER['DOCUMENT_ROOT'].'/wp-content/uploads/pres/' ) ){
 								$dir_contents = scandir( $_SERVER['DOCUMENT_ROOT'].'/wp-content/uploads/pres/' );
@@ -857,7 +857,7 @@ jQuery( function(){
 	-webkit-appearance:	none;
 	-moz-appearance:	input;
 	appearance:			none;
-	opacity: 0.4;
+	opacity: 0.2;
 	height: 24px;
 	width: 32px;
 	background-repeat: no-repeat;

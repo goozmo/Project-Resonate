@@ -79,3 +79,23 @@ wp_head();
 	<div id='main' data-scroll-offset='<?php echo avia_header_setting('header_scroll_offset'); ?>'>
 
 	<?php do_action('ava_after_main_container'); ?>
+
+	<?php
+	
+	if( is_front_page() ) : 
+		?>
+		<div class="_goo-mobile-banner _goo-mobile">
+			<div class="_goo-overlay">
+				<div class="_goo-overlay-text">
+					<h2>Project Resonate Bracelet</h2>
+					<h3>Custom soundwave bracelet made by you!</h3>
+					<h4>Find out More!</h4>
+				</div>
+			</div>
+			
+			<img src="/wp-content/uploads/2015/06/DSC_0039.jpg" alt="Project Resonate" />
+		</div>
+		<?php
+	endif;	
+		
+	?>
