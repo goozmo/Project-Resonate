@@ -1,0 +1,48 @@
+<IfModule mod_deflate.c>
+   <IfModule mod_headers.c>
+       Header append Vary User-Agent env=!dont-vary
+   </IfModule>
+       AddOutputFilterByType DEFLATE text/css text/x-component application/x-javascript application/javascript text/javascript text/x-js text/html text/richtext image/svg+xml text/plain text/xsd text/xsl text/xml image/x-icon application/json
+   <IfModule mod_mime.c>
+       # DEFLATE by extension
+       AddOutputFilter DEFLATE js css htm html xml
+   </IfModule>
+</IfModule>
+
+
+<IfModule mod_expires.c>
+   ExpiresActive on
+   ExpiresByType text/css "access plus 1 month"
+   AddType application/x-font-woff .woff
+   ExpiresByType application/x-font-woff "access plus 1 year"
+   ExpiresByType image/jpg "access plus 1 month"
+   ExpiresByType image/jpeg "access plus 1 month"
+   ExpiresByType image/gif "access plus 1 month"
+   ExpiresByType image/png "access plus 1 month"
+</IfModule>
+
+Redirect 301 /how-to-create.html http://projectresonate.com/create/
+Redirect 301 /order.html hhttp://projectresonate.com/shop/ 
+Redirect 301 /our-product.html http://projectresonate.com/our-product/
+Redirect 301 /how-to-create.html http://projectresonate.com/create/
+Redirect 301 /sound-code.html http://projectresonate.com/sound-code/
+Redirect 301 /questions.html http://projectresonate.com/q-a/
+Redirect 301 /contact.html http://projectresonate.com/contact/
+Redirect 301 http://projectresonate.com/ http://projectresonate.com
+
+
+# BEGIN WordPress
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /
+RewriteRule ^index\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.php [L]
+</IfModule>
+
+# END WordPress
+#AuthName "public"
+#AuthUserFile "/home/resonate/.htpasswds/public_html/passwd"
+#AuthType Basic
+#require valid-user
