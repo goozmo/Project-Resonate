@@ -223,22 +223,15 @@ function soundcode_form(){
 								// echo count( $dir_contents );
 								
 								foreach( $dir_contents as $_file_ ){
-									
 									if( preg_match( "/^$_sound_code_.png/i", $_file_) ){
 										// echo "bingo";
 										$_img_file_ = $_file_;
 									}
-									
-									if( preg_match( "/^$_sound_code_.(wav|mp4|mov|m4v)/i", $_file_ ) ){
+									if( preg_match( "/^$_sound_code_.(wav|mp4|mov|m4v|mp3|ogg)/i", $_file_ ) ){
 										// echo "bongo";
 										$_aud_file_ = $_file_;
 									}
-									
 								}
-								
-								// echo "<pre>";
-								// print_r( $dir_contents );
-								// echo "</pre>";
 								
 							}
 							
@@ -249,18 +242,31 @@ function soundcode_form(){
 							$output.= "</div><br/>";
 							endif;
 							
+							
+							
 							if( $_aud_file_ ) :
-							
-							$output.= "<audio controls class='_goo-transloadit-audio'>";
-
-							$_aud_type_ = 'wav';
-							if( preg_match('/^.*\.(wav)$/i', $_aud_file_) ){
-								$_aud_type_ = 'wav';
-							}
+								preg_match( '/(?:\w+\.)(\w+)/i', $_aud_file_, $capture, PREG_OFFSET_CAPTURE );
+								if( $capture[1][0] ) : 
+									$_aud_type_ = $capture[1][0];
+								else : 
+									$_aud_type_ = null;
+								endif;
 									
+								if( $_aud_file_ && $_aud_type_ ) :
+									
+									if( preg_match( '/wav|mp3/i', $_aud_type_ ) ) :
+										$output.= "<audio controls class='_goo-transloadit-audio'>";
+										$output.= "<source src='/wp-content/uploads/pres/$_aud_file_' type='audio/$_aud_type_' />";
+										$output.= "</audio>";
+									elseif( preg_match( '/mp4|mov|webm/i', $_aud_type_) ) :
+										$output.= "<video height='10' controls>";
+										$output.= "<source src='/wp-content/uploads/pres/$_aud_file_' >";
+										$output.= "Your browser does not support the video tag.";
+										$output.= "</video>";
+										
+									endif;
+								endif;
 							
-							$output.= "<source src='/wp-content/uploads/pres/$_aud_file_' type='audio/$_aud_type_' />";
-							$output.= "</audio>";
 							endif;						
 
 							if( !$_aud_file_ && !$_img_file_ ){

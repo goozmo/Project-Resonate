@@ -399,7 +399,7 @@ a.cart-contents.style-text .mini-cart-text {
 
 .home #av-layout-grid-1
 {
-	margin-top: 140px;
+	margin-top: 40px;
 }
 
 @media screen and ( max-width: 768px ){
@@ -728,7 +728,12 @@ p.ls-l
 	}
 	.home #av-layout-grid-1
 	{
-		margin-top: 100px;
+		margin-top: 0px;
+	}
+	
+	#home-soundcode input[name="pres-soundcode"]
+	{
+		width: 100%;
 	}
 }
 
@@ -769,4 +774,38 @@ p.ls-l
 .variations_form.cart input[disabled=true]
 {
 	opacity: 0.2;
+}
+
+.page-id-28 video,
+.page-id-28 audio
+{
+	height: 0px;
+	max-width: 300px;
+	margin: 0 auto;
+	display:block;
+	padding-top: 40px;
+}
+
+.home h1.av-special-heading-tag
+{
+	display: none;
+}
+
+.html_header_top.html_bottom_nav_header .main_menu>div, .html_header_top.html_bottom_nav_header .main_menu ul:first-child
+{
+	width: auto;
+}
+
+#header_main .social_bookmarks, #header_main nav .social_bookmarks
+{
+	margin-top: 0;
+}
+
+a.button
+{
+	color: rgb( 255,255,255 );
+	background-color: rgb( 239, 118, 34 );
+	font-size: 1.2em;
+	text-transform: uppercase;
+	margin: 10px 0;
 }
