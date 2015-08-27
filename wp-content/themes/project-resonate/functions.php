@@ -722,7 +722,7 @@ _goo_variation_inst = {
 				//this.requestAnimationFrame( _animate );
 			}
 			else if( fHeight == 100 ){
-				_goo_variation_inst.upload_form.style.maxHeight = "500px";
+				_goo_variation_inst.upload_form.style.maxHeight = "1000px";
 				for( var i=0, n=thingies.length; i<n; i++ ){
 					thingies[i].style.opacity = 1;
 				}
