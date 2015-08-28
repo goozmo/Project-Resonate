@@ -550,7 +550,7 @@ add_action( 'woocommerce_before_add_to_cart_form', 'do_step1');
 function do_step1(){
 	?>
 	<br/>
-	<h4 class="_goo-order-step"><span>Step 1: </span>Choose your product variations: band and bead color.</h4>
+	<h4 class="_goo-order-step"><span>Step 1: </span>Choose your product variations: band and bead color. <i>Photo updates with product selection.</i></h4>
 	<?php
 }
 

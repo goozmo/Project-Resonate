@@ -809,3 +809,43 @@ a.button
 	text-transform: uppercase;
 	margin: 10px 0;
 }
+
+@media screen and ( max-width: 767px ){
+	
+	.cart input#band-color
+	{
+		width: 20px;
+	}
+	
+	._goo-images #_goo-imageThing
+	{
+		max-height: none;
+		
+	}
+	
+	._goo-images #_goo-imageThing img
+	{
+		height: auto;
+	}
+	
+	.single-product-main-image
+	{
+		min-height: 250px;
+		max-height: 250px;
+	}
+	
+}
+
+@media screen and ( max-width: 1080px ){
+	
+	.ls-l
+	{
+		top: 75px !important;
+	}
+	
+	p.ls-l span
+	{
+		font-size: 80% !important;
+	}
+		
+}
