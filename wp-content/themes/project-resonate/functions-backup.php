@@ -386,14 +386,14 @@ function add_cart_item_custom_data_vase( $cart_item_meta, $product_id, $variatio
 		*
 	*/
 
-//	$sound_code = rand( 0, 10000000 );
-	$sound_code = 6507050;
-	if( is_dir( $_SERVER['DOCUMENT_ROOT'].'/wp-content/uploads/pres/' ) ){
+	$sound_code = rand( 0, 10000000 );
+	
+	if( file_exists( $_SERVER['DOCUMENT_ROOT'].'/wp-content/uploads/pres/' ) || is_dir( $_SERVER['DOCUMENT_ROOT'].'/wp-content/uploads/pres/' ) ){
 		$pre_array = scandir( $_SERVER['DOCUMENT_ROOT'].'/wp-content/uploads/pres/' );
 		foreach( $pre_array as $_file_ ){
 			if( $_file_ != "." && $_file_ != ".." ){
 				while( preg_match( "/$sound_code/", $_file_ ) == true ){
-					$sound_code = rand( 0, 10000000 );
+					$sound_code = rand( 9999999, 10000000 );
 				}
 			}
 		}
